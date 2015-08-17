@@ -74,9 +74,9 @@ Vector3.prototype.copy = function( v ) {
 };
 
 Vector3.prototype.cross = function( v ) {
-  var x = this.x,
-      y = this.y,
-      z = this.z;
+  var x = this.x;
+  var y = this.y;
+  var z = this.z;
 
   this.x = y * v.z - z * v.y;
   this.y = z * v.x - x * v.z;
@@ -109,9 +109,9 @@ Vector3.prototype.length = function() {
 };
 
 Vector3.prototype.distanceToSquared = function( v ) {
-  var dx = this.x - v.x,
-      dy = this.y - v.y,
-      dz = this.z - v.z;
+  var dx = this.x - v.x;
+  var dy = this.y - v.y;
+  var dz = this.z - v.z;
 
   return dx * dx + dy * dy + dz * dz;
 };
@@ -134,9 +134,9 @@ Vector3.prototype.lerp = function( v, alpha ) {
 };
 
 Vector3.prototype.applyMatrix3 = function( m ) {
-  var x = this.x,
-      y = this.y,
-      z = this.z;
+  var x = this.x;
+  var y = this.y;
+  var z = this.z;
 
   var e = m.elements;
 
@@ -149,9 +149,9 @@ Vector3.prototype.applyMatrix3 = function( m ) {
 
 Vector3.prototype.applyMatrix4 = function( m ) {
   // input: Matrix4 affine matrix
-  var x = this.x,
-      y = this.y,
-      z = this.z;
+  var x = this.x;
+  var y = this.y;
+  var z = this.z;
 
   var e = m.elements;
 
@@ -163,9 +163,9 @@ Vector3.prototype.applyMatrix4 = function( m ) {
 };
 
 Vector3.prototype.applyProjection = function( m ) {
-  var x = this.x,
-      y = this.y,
-      z = this.z;
+  var x = this.x;
+  var y = this.y;
+  var z = this.z;
 
   var e = m.elements;
   // Perspective divide.

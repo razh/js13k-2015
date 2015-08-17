@@ -94,7 +94,6 @@ Matrix3.prototype.getInverse = function( matrix ) {
   if ( !det ) {
     this.identity();
     return this;
-
   }
 
   this.multiplyScalar( 1 / det );

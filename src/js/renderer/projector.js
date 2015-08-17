@@ -21,37 +21,31 @@ var RenderableQuad = require( './renderable-quad' );
 var RenderableSprite = require( './renderable-sprite' );
 
 function Projector() {
-  var _object, _objectCount, _objectPool = [],
-  _vertex, _vertexCount = 0, _vertexPool = [],
-  _face, _faceCount = 0, _facePool = [],
-  _quadCount = 0, _quadPool = [],
-  _sprite, _spriteCount, _spritePool = [],
+  var _object, _objectCount, _objectPool = [];
+  var _vertex, _vertexCount = 0, _vertexPool = [];
+  var _face, _faceCount = 0, _facePool = [];
+  var _quadCount = 0, _quadPool = [];
+  var _sprite, _spriteCount, _spritePool = [];
 
-  _renderData = { objects: [], lights: [], elements: [] },
+  var _renderData = { objects: [], lights: [], elements: [] };
 
-  _vector3 = new Vector3(),
-  _vector4 = new Vector4(),
+  var _vector3 = new Vector3();
+  var _vector4 = new Vector4();
 
-  _clipBox = new Box3(
+  var _clipBox = new Box3(
     new Vector3( -1, -1, -1 ),
     new Vector3(  1,  1,  1 )
-  ),
-  _boundingBox = new Box3(),
-  _points = [],
+  );
+  var _boundingBox = new Box3();
+  var _points = [];
 
-  _viewMatrix = new Matrix4(),
-  _viewProjectionMatrix = new Matrix4(),
+  var _viewMatrix = new Matrix4();
+  var _viewProjectionMatrix = new Matrix4();
 
-  _modelMatrix,
-  _normalMatrix = new Matrix3();
+  var _modelMatrix;
+  var _normalMatrix = new Matrix3();
 
   function RenderList() {
-    var object, material;
-
-    function setObject( value ) {
-      object = value;
-      material = object.material;
-    }
 
     function projectVertex( vertex ) {
       var position = vertex.position;
@@ -97,17 +91,18 @@ function Projector() {
     }
 
     function checkBackfaceCulling( v0, v1, v2 ) {
-      return ( ( v2.positionScreen.x - v0.positionScreen.x ) *
-               ( v1.positionScreen.y - v0.positionScreen.y ) -
-               ( v2.positionScreen.y - v0.positionScreen.y ) *
-               ( v1.positionScreen.x - v0.positionScreen.x ) ) < 0;
+      return (
+        ( v2.positionScreen.x - v0.positionScreen.x ) *
+        ( v1.positionScreen.y - v0.positionScreen.y ) -
+        ( v2.positionScreen.y - v0.positionScreen.y ) *
+        ( v1.positionScreen.x - v0.positionScreen.x )
+      ) < 0;
     }
 
     return {
-      setObject: setObject,
       pushVertex: pushVertex,
       checkTriangleVisibility: checkTriangleVisibility,
-      checkBackfaceCulling: checkBackfaceCulling,
+      checkBackfaceCulling: checkBackfaceCulling
     };
   }
 

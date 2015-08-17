@@ -275,11 +275,11 @@ function Renderer( options ) {
   }
 
   function expand( v0, v1, pixels ) {
-    var x = v1.x - v0.x,
-        y = v1.y - v0.y;
+    var x = v1.x - v0.x;
+    var y = v1.y - v0.y;
 
-    var det = x * x + y * y,
-        idet;
+    var det = x * x + y * y;
+    var idet;
 
     if ( !det ) {
       return;

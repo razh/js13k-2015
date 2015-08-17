@@ -3,9 +3,9 @@
 var _ = require( '../utils' );
 var Color = require( '../math/color' );
 
-var FrontSide  = 0,
-    BackSide   = 1,
-    DoubleSide = 2;
+var FrontSide  = 0;
+var BackSide   = 1;
+var DoubleSide = 2;
 
 function Material( options ) {
   options = options || {};

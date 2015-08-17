@@ -11,16 +11,20 @@ function Box3( min, max ) {
 }
 
 Box3.prototype.contains = function( point ) {
-  return !( this.min.x > point.x || point.x > this.max.x ||
-            this.min.y > point.y || point.y > this.max.y ||
-            this.min.z > point.z || point.z > this.max.z );
+  return !(
+    this.min.x > point.x || point.x > this.max.x ||
+    this.min.y > point.y || point.y > this.max.y ||
+    this.min.z > point.z || point.z > this.max.z
+  );
 };
 
 Box3.prototype.isIntersectionBox = function( box ) {
   // using 6 splitting planes to rule out intersections.
-  return !( box.max.x < this.min.x || this.max.x < box.min.x ||
-            box.max.y < this.min.y || this.max.y < box.min.y ||
-            box.max.z < this.min.z || this.max.z < box.min.z );
+  return !(
+    box.max.x < this.min.x || this.max.x < box.min.x ||
+    box.max.y < this.min.y || this.max.y < box.min.y ||
+    box.max.z < this.min.z || this.max.z < box.min.z
+  );
 };
 
 Box3.prototype.expandByPoint = function( point ) {

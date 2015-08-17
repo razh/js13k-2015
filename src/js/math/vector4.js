@@ -24,10 +24,10 @@ Vector4.prototype.copy = function( v ) {
 };
 
 Vector4.prototype.applyMatrix4 = function( m ) {
-  var x = this.x,
-      y = this.y,
-      z = this.z,
-      w = this.w;
+  var x = this.x;
+  var y = this.y;
+  var z = this.z;
+  var w = this.w;
 
   var e = m.elements;
 

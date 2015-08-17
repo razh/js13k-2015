@@ -225,9 +225,9 @@ Matrix4.prototype.makeRotationFromQuaternion = function( q ) {
 };
 
 Matrix4.prototype.lookAt = (function() {
-  var x = new Vector3(),
-      y = new Vector3(),
-      z = new Vector3();
+  var x = new Vector3();
+  var y = new Vector3();
+  var z = new Vector3();
 
   return function( eye, target, up ) {
     var te = this.elements;
@@ -266,9 +266,9 @@ Matrix4.prototype.lookAt = (function() {
 Matrix4.prototype.scale = function( v ) {
   var te = this.elements;
 
-  var x = v.x,
-      y = v.y,
-      z = v.z;
+  var x = v.x;
+  var y = v.y;
+  var z = v.z;
 
   te[  0 ] *= x;
   te[  1 ] *= x;

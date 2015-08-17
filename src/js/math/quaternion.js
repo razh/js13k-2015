@@ -10,8 +10,8 @@ function Quaternion( x, y, z, w ) {
 Quaternion.prototype.setFromAxisAngle = function( axis, angle ) {
   // http://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToQuaternion/index.htm
   // assumes axis is normalized
-  var halfAngle = angle / 2,
-      s = Math.sin( halfAngle );
+  var halfAngle = angle / 2;
+  var s = Math.sin( halfAngle );
 
   this.x = axis.x * s;
   this.y = axis.y * s;
@@ -42,14 +42,14 @@ Quaternion.prototype.setFromRotationMatrix = function ( m ) {
   // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
   // assumes the upper 3x3 of m is a pure rotation matrix (i.e, unscaled)
 
-  var e = m.elements,
+  var e = m.elements;
 
-  m11 = e[ 0 ], m12 = e[ 4 ], m13 = e[  8 ],
-  m21 = e[ 1 ], m22 = e[ 5 ], m23 = e[  9 ],
-  m31 = e[ 2 ], m32 = e[ 6 ], m33 = e[ 10 ],
+  var m11 = e[ 0 ], m12 = e[ 4 ], m13 = e[  8 ];
+  var m21 = e[ 1 ], m22 = e[ 5 ], m23 = e[  9 ];
+  var m31 = e[ 2 ], m32 = e[ 6 ], m33 = e[ 10 ];
 
-  trace = m11 + m22 + m33,
-  s;
+  var trace = m11 + m22 + m33;
+  var s;
 
   if ( trace > 0 ) {
 

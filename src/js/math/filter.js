@@ -12,8 +12,10 @@ Filter.prototype.collides = function( filter ) {
     return this.groupIndex > 0;
   }
 
-  return ( this.maskBits & filter.categoryBits ) &&
-         ( this.categoryBits & filter.maskBits );
+  return (
+    ( this.maskBits & filter.categoryBits ) &&
+    ( this.categoryBits & filter.maskBits )
+  );
 };
 
 module.exports = Filter;
