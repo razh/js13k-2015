@@ -36,6 +36,7 @@ function Projector() {
     new Vector3( -1, -1, -1 ),
     new Vector3(  1,  1,  1 )
   );
+
   var _boundingBox = new Box3();
   var _points = [];
 
@@ -167,7 +168,6 @@ function Projector() {
         continue;
       }
 
-      renderList.setObject( object );
       _modelMatrix = object.matrixWorld;
       _vertexCount = 0;
 

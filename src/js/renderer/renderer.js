@@ -15,36 +15,34 @@ var LambertMaterial = require( '../materials/lambert-material' );
 function Renderer( options ) {
   options = options || {};
 
-  var _this = this,
-  _renderData, _elements, _lights,
-  _projector = new Projector(),
+  var _this = this;
+  var _renderData, _elements, _lights;
+  var _projector = new Projector();
 
-  _ctx = options.ctx,
+  var _ctx = options.ctx;
 
-  _canvasWidth,
-  _canvasHeight,
-  _canvasWidthHalf,
-  _canvasHeightHalf,
+  var _canvasWidth;
+  var _canvasHeight;
+  var _canvasWidthHalf;
+  var _canvasHeightHalf;
 
-  _camera,
+  var _v0, _v1, _v2, _v3;
 
-  _v0, _v1, _v2, _v3,
+  var _v0x, _v0y;
+  var _v1x, _v1y;
+  var _v2x, _v2y;
+  var _v3x, _v3y;
 
-  _v0x, _v0y,
-  _v1x, _v1y,
-  _v2x, _v2y,
-  _v3x, _v3y,
+  var _color = new Color();
+  var _diffuseColor = new Color();
+  var _emissiveColor = new Color();
+  var _lightColor = new Color();
 
-  _color = new Color(),
-  _diffuseColor = new Color(),
-  _emissiveColor = new Color(),
-  _lightColor = new Color(),
+  var _ambientLight = options.ambient || new Color();
+  var _intensity = 0;
+  var _fogDensity;
 
-  _ambientLight = options.ambient || new Color(),
-  _intensity = 0,
-  _fogDensity,
-
-  _vector3 = new Vector3();
+  var _vector3 = new Vector3();
 
   if ( !_ctx ) {
     return;
@@ -85,7 +83,6 @@ function Renderer( options ) {
     _renderData = _projector.projectScene( scene, camera );
     _elements = _renderData.elements;
     _lights = _renderData.lights;
-    _camera = camera;
 
     _fogDensity = scene.fogDensity;
 
