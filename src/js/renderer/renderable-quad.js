@@ -2,7 +2,7 @@
 
 var _ = require( '../utils' );
 var RenderableVertex = require( './renderable-vertex' );
-var RenderableFace = require( './renderable-Face' );
+var RenderableFace = require( './renderable-face' );
 
 function RenderableQuad() {
   RenderableFace.call( this );
