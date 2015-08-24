@@ -1,4 +1,3 @@
-/*jshint bitwise:false*/
 'use strict';
 
 var lerp = require( '../utils' ).lerp;

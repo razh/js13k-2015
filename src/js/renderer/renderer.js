@@ -158,7 +158,8 @@ function Renderer( options ) {
       light = _lights[l];
       _lightColor.copy( light.color );
 
-      _vector3.setFromMatrixPosition( light.matrixWorld )
+      _vector3
+        .setFromMatrixPosition( light.matrixWorld )
         .normalize();
 
       amount = normal.dot( _vector3 );

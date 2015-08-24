@@ -1,14 +1,13 @@
 'use strict';
 
 var Vector3 = require( '../math/vector3' );
-var Box3 = require( '../math/box3' );
 
 var Face3 = require( './face3' );
 var Quad = require( './quad' );
 
 // Temp vectors.
-var cb = new Vector3(),
-    ab = new Vector3();
+var cb = new Vector3();
+var ab = new Vector3();
 
 function Geometry() {
   this.vertices = [];
