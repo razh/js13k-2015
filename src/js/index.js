@@ -6,8 +6,9 @@ var Geometry = require( './geometry/geometry' );
 var Mesh = require( './objects/mesh' );
 var Color = require( './math/color' );
 var DirectionalLight = require( './lights/directional-light' );
-var LambertGlowMaterial = require( './materials/lambert-glow-material' );
+var LambertMaterial = require( './materials/lambert-material' );
 var addBoxGeometry = require( './geometry/box-geometry' );
+var createPlaneGeometry = require( './geometry/plane-geometry' );
 var OrbitControls = require( './controls/orbit-controls' );
 
 var $ = document.querySelector.bind( document );
@@ -36,18 +37,34 @@ function reset() {
   addBoxGeometry( buildings, 1, 2.5, 1 );
   buildings.computeFaceNormals();
 
-  var material = new LambertGlowMaterial({
-    color: new Color( 0.9, 0.9, 0.9 ),
+  var material = new LambertMaterial({
+    color: new Color( 0.8, 0.8, 0.8 ),
     ambient: new Color( 0.5, 0.5, 0.5 ),
     diffuse: new Color( 0.5, 0.5, 0.5 ),
-    overdraw: 1
+    overdraw: 0.5
   });
 
   var mesh = new Mesh( buildings, material );
   scene.add( mesh );
 
-  var light = new DirectionalLight( new Color( 0.5, 0.5, 0.5 ) );
-  light.position.set( -10, 0, 5 );
+  var planeGeometry = createPlaneGeometry( 16, 16, 16, 16 );
+  planeGeometry.vertices.forEach(function( vertex ) {
+    vertex.y = Math.random();
+  });
+  planeGeometry.computeFaceNormals();
+
+  var planeMaterial = new LambertMaterial({
+    color: new Color( 0.5, 0.5, 0.5 ),
+    ambient: new Color( 0.2, 0.2, 0.2 ),
+    diffuse: new Color( 0.5, 0.5, 0.5 ),
+    overdraw: 0.5
+  });
+  var planeMesh = new Mesh( planeGeometry, planeMaterial );
+
+  scene.add( planeMesh );
+
+  var light = new DirectionalLight( new Color( 1, 0.8, 0.8 ) );
+  light.position.set( -4, 4, 5 );
   scene.add( light );
 
   game.ambient.setRGB( 0.2, 0.2, 0.2 );
