@@ -16,6 +16,10 @@ var $ = document.querySelector.bind( document );
 var WIDTH = 852;
 var HEIGHT = 480;
 
+function on( el, type, listener ) {
+  el.addEventListener( type, listener );
+}
+
 function append( parent, el ) {
   parent.appendChild( el );
 }
@@ -78,3 +82,7 @@ function reset() {
 
 reset();
 game.play();
+
+on( window, 'resize', function() {
+  game.setSize( window.innerWidth, window.innerHeight );
+});
