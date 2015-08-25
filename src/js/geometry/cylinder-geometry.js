@@ -85,6 +85,8 @@ module.exports = function createCylinderGeometry(
       v0 = vertices[ heightSegments ][ x + 1 ];
       v1 = vertices[ heightSegments ][ x     ];
       v2 = geometry.vertices.length - 1;
+
+      geometry.faces.push( new Face3( v0, v1, v2 ) );
     }
   }
 
