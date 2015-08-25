@@ -8,6 +8,7 @@ var Color = require( './math/color' );
 var DirectionalLight = require( './lights/directional-light' );
 var LambertMaterial = require( './materials/lambert-material' );
 var addBoxGeometry = require( './geometry/box-geometry' );
+var createCylinderGeometry = require( './geometry/cylinder-geometry' );
 var createPlaneGeometry = require( './geometry/plane-geometry' );
 var OrbitControls = require( './controls/orbit-controls' );
 
@@ -51,8 +52,14 @@ function reset() {
   var mesh = new Mesh( buildings, material );
   scene.add( mesh );
 
+  var cylinder = createCylinderGeometry( 0, 1, 2.5, 4, 1 );
+  var cylinderMesh = new Mesh( cylinder, material );
+  cylinderMesh.position.x = 2;
+  cylinderMesh.position.y = 1.25;
+  scene.add( cylinderMesh );
+
   var planeGeometry = createPlaneGeometry( 16, 16, 16, 16 );
-  planeGeometry.vertices.forEach(function( vertex ) {
+  planeGeometry.vertices.map(function( vertex ) {
     vertex.y = Math.random();
   });
   planeGeometry.computeFaceNormals();
