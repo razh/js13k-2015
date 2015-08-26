@@ -1,6 +1,7 @@
 'use strict';
 
 var Vector3 = require( '../math/vector3' );
+var Sphere = require( '../math/sphere' );
 
 var Face3 = require( './face3' );
 var Quad = require( './quad' );
@@ -12,6 +13,8 @@ var ab = new Vector3();
 function Geometry() {
   this.vertices = [];
   this.faces = [];
+
+  this.boundingSphere = null;
 }
 
 /**
@@ -88,6 +91,14 @@ Geometry.prototype.computeFaceNormals = function() {
     cb.cross( ab ).normalize();
     face.normal.copy( cb );
   }
+};
+
+Geometry.prototype.computeBoundingSphere = function() {
+  if ( !this.boundingSphere ) {
+    this.boundingSphere = new Sphere();
+  }
+
+  this.boundingSphere.setFromPoints( this.vertices );
 };
 
 module.exports = Geometry;
