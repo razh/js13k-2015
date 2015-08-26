@@ -1,8 +1,8 @@
 'use strict';
 
-var _ = require( './../utils' );
-var Vector3 = require( './../math/vector3' );
-var Quaternion = require( './../math/quaternion' );
+var _ = require( '../utils' );
+var Vector3 = require( '../math/vector3' );
+var Quaternion = require( '../math/quaternion' );
 
 Vector3.prototype.sub = function( v ) {
   this.x -= v.x;

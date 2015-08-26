@@ -2,7 +2,7 @@
 
 var Face3 = require( './Face3' );
 var Geometry = require( './geometry' );
-var Vector3 = require( './../math/vector3' );
+var Vector3 = require( '../math/vector3' );
 
 module.exports = function createCylinderGeometry(
   radiusTop,
