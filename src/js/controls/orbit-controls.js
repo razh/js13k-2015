@@ -4,13 +4,6 @@ var _ = require( '../utils' );
 var Vector3 = require( '../math/vector3' );
 var Quaternion = require( '../math/quaternion' );
 
-Vector3.prototype.sub = function( v ) {
-  this.x -= v.x;
-  this.y -= v.y;
-  this.z -= v.z;
-  return this;
-};
-
 Quaternion.prototype.length = function() {
   return Math.sqrt(
     this.x * this.x +
@@ -103,7 +96,7 @@ function OrbitControls( object ) {
   this.update = function() {
     var position = this.object.position;
 
-    offset.copy( position ).sub( this.target );
+    offset.subVectors( position, this.target );
 
     // rotate offset to "y-axis-is-up" space
     offset.applyQuaternion( quat );
