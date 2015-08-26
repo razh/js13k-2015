@@ -19,6 +19,8 @@ const watchify = require('watchify');
 const gulp = require('gulp');
 const $ = require('gulp-load-plugins')();
 
+const replaceAll = require('./replaceAll');
+
 let production = false;
 
 function onError(error) {
@@ -54,6 +56,7 @@ gulp.task('js', function() {
       .pipe(source('bundle.js'))
       .pipe(buffer())
       .pipe($.if(production, $.uglify()))
+      .pipe($.if(production, replaceAll()))
       .pipe(gulp.dest(BUILD_DIR + '/js'))
       .pipe($.if(!production, browserSync.reload({ stream: true })));
   }
