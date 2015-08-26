@@ -10,7 +10,7 @@ function SpriteCanvasMaterial( options ) {
   this.program = function() {};
 }
 
-_.extends( SpriteCanvasMaterial, Material );
+_.inherits( SpriteCanvasMaterial, Material );
 
 SpriteCanvasMaterial.prototype.draw = function( ctx ) {
   this.program.call( this, ctx );

@@ -9,6 +9,6 @@ function RenderableQuad() {
   this.v3 = new RenderableVertex();
 }
 
-_.extends( RenderableQuad, RenderableFace );
+_.inherits( RenderableQuad, RenderableFace );
 
 module.exports = RenderableQuad;

@@ -13,6 +13,6 @@ function Mesh( geometry, material ) {
   this.filter = new Filter();
 }
 
-_.extends( Mesh, Object3D );
+_.inherits( Mesh, Object3D );
 
 module.exports = Mesh;

@@ -108,7 +108,7 @@ const substitutions = {
   'tC': 'strokeColor',
   'cr': 'color',
   // Utils.
-  '.e': '.extends',
+  '.i': '.inherits',
   // Browserify warnings.
   'NF': 'MODULE_NOT_FOUND',
   'N': 'Cannot find module '

@@ -17,6 +17,6 @@ function Sprite( material ) {
   this.material = material;
 }
 
-_.extends( Sprite, Object3D );
+_.inherits( Sprite, Object3D );
 
 module.exports = Sprite;

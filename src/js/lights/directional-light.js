@@ -13,6 +13,6 @@ function DirectionalLight( color, intensity ) {
   this.filter = new Filter();
 }
 
-_.extends( DirectionalLight, Object3D );
+_.inherits( DirectionalLight, Object3D );
 
 module.exports = DirectionalLight;

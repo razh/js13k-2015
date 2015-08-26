@@ -12,7 +12,7 @@ function LambertMaterial( options ) {
   this.emissive = options.emissive || new Color();
 }
 
-_.extends( LambertMaterial, Material );
+_.inherits( LambertMaterial, Material );
 
 LambertMaterial.prototype.draw = function( ctx, color, alpha ) {
   ctx.fillStyle = color.toString();

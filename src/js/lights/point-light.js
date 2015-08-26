@@ -9,6 +9,6 @@ function PointLight( color, intensity, distance ) {
   this.distance = distance || 0;
 }
 
-_.extends( PointLight, DirectionalLight );
+_.inherits( PointLight, DirectionalLight );
 
 module.exports = PointLight;

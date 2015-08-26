@@ -10,7 +10,7 @@ function LambertGlowMaterial( options ) {
   this.filter = new Filter();
 }
 
-_.extends( LambertGlowMaterial, LambertMaterial );
+_.inherits( LambertGlowMaterial, LambertMaterial );
 
 LambertGlowMaterial.prototype.draw = function( ctx, color, alpha, intensity ) {
   ctx.shadowBlur = this.shadowBlur * intensity;

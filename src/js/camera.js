@@ -24,7 +24,7 @@ function Camera( fov, aspect, near, far ) {
   this.updateProjectionMatrix();
 }
 
-_.extends( Camera, Object3D );
+_.inherits( Camera, Object3D );
 
 Camera.prototype.lookAt = function( vector ) {
   mt.lookAt( this.position, vector, Vector3.Y );
