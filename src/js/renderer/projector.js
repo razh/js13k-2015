@@ -126,8 +126,8 @@ function Projector() {
     _renderData.lights.length = 0;
 
     var object;
-    var i, il;
-    for ( i = 0, il = scene.children.length; i < il; i++ ) {
+    var i;
+    for ( i = 0; i < scene.children.length; i++ ) {
       object = scene.children[i];
       if ( !object.visible ) {
         continue;
@@ -154,14 +154,14 @@ function Projector() {
 
     var geometry, material, side;
     var vertices, faces;
-    var v, vl;
+    var v;
     var vertex;
-    var f, fl;
+    var f;
     var face;
     var isQuad;
     var visible;
     var v0, v1, v2, v3;
-    for ( i = 0, il = _renderData.objects.length; i < il; i++ ) {
+    for ( i = 0; i < _renderData.objects.length; i++ ) {
       object = _renderData.objects[i].object;
       geometry = object.geometry;
       material = object.material;
@@ -180,12 +180,12 @@ function Projector() {
         _normalMatrix.getNormalMatrix( _modelMatrix );
         side = material.side;
 
-        for ( v = 0, vl = vertices.length; v < vl; v++ ) {
+        for ( v = 0; v < vertices.length; v++ ) {
           vertex = vertices[v];
           renderList.pushVertex( vertex.x, vertex.y, vertex.z );
         }
 
-        for ( f = 0, fl = faces.length; f < fl; f++ ) {
+        for ( f = 0; f < faces.length; f++ ) {
           face = faces[f];
           isQuad = face instanceof Quad;
 

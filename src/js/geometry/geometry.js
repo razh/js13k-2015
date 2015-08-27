@@ -33,8 +33,8 @@ function Geometry() {
 Geometry.prototype.push = function( vertices, faces ) {
   var offset = this.vertices.length;
 
-  var i, il;
-  for ( i = 0, il = vertices.length; i < il; i += 3 ) {
+  var i;
+  for ( i = 0; i < vertices.length; i += 3 ) {
     this.vertices.push(
       new Vector3(
         vertices[ i     ],
@@ -46,7 +46,7 @@ Geometry.prototype.push = function( vertices, faces ) {
 
   var indices;
   var face;
-  for ( i = 0, il = faces.length; i < il; i++ ) {
+  for ( i = 0; i < faces.length; i++ ) {
     indices = faces[i];
 
     if ( indices.length === 3 ) {
@@ -75,7 +75,7 @@ Geometry.prototype.push = function( vertices, faces ) {
 Geometry.prototype.computeFaceNormals = function() {
   var face;
   var vA, vB, vC;
-  for ( var f = 0, fl = this.faces.length; f < fl; f++ ) {
+  for ( var f = 0; f < this.faces.length; f++ ) {
     face = this.faces[f];
 
     vA = this.vertices[ face.a ];

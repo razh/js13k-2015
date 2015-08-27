@@ -24,7 +24,7 @@ module.exports = function addBoxGeometry( geometry, width, height, depth, dx, dy
     halfWidth,  height, -halfDepth
   ];
 
-  for ( var i = 0, il = vertices.length; i < il; i += 3 ) {
+  for ( var i = 0; i < vertices.length; i += 3 ) {
     vertices[ i     ] += dx;
     vertices[ i + 1 ] += dy;
     vertices[ i + 2 ] += dz;

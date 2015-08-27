@@ -48,7 +48,7 @@ Box3.prototype.makeEmpty = function() {
 Box3.prototype.setFromPoints = function( points ) {
   this.makeEmpty();
 
-  for ( var i = 0, il = points.length; i < il; i++ ) {
+  for ( var i = 0; i < points.length; i++ ) {
     this.expandByPoint( points[i] );
   }
 
@@ -60,7 +60,7 @@ Box3.prototype.setFromObject = function( object ) {
   this.makeEmpty();
 
   var vertices = object.geometry.vertices;
-  for ( var i = 0, il = vertices.length; i < il; i++ ) {
+  for ( var i = 0; i < vertices.length; i++ ) {
     vt.copy( vertices[i] )
       .applyMatrix4( object.matrixWorld );
 

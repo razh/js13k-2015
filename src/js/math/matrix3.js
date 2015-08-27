@@ -1,25 +1,11 @@
 'use strict';
 
-function Matrix3(
-  n11, n12, n13,
-  n21, n22, n23,
-  n31, n32, n33
-) {
-  this.elements = new Float32Array( 9 );
-
-  var te = this.elements;
-
-  te[ 0 ] = ( n11 !== undefined ) ? n11 : 1;
-  te[ 3 ] = n12 || 0;
-  te[ 6 ] = n13 || 0;
-
-  te[ 1 ] = n21;
-  te[ 4 ] = ( n22 !== undefined ) ? n22 : 1;
-  te[ 7 ] = n23 || 0;
-
-  te[ 2 ] = n31;
-  te[ 5 ] = n32 || 0;
-  te[ 8 ] = ( n33 !== undefined ) ? n33 : 1;
+function Matrix3() {
+  this.elements = new Float32Array([
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, 1
+  ]);
 }
 
 Matrix3.prototype.set = function (
