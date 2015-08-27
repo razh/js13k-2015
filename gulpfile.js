@@ -84,6 +84,7 @@ gulp.task('compress', function() {
   return gulp.src(BUILD_DIR + '/**/*')
     .pipe($.zip('build.zip'))
     .pipe($.size())
+    .pipe($.size({ pretty: false }))
     .pipe($.micro({ limit: 13 * 1024 }))
     .pipe(gulp.dest(DIST_DIR));
 });

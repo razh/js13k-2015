@@ -88,7 +88,7 @@ function Renderer( options ) {
 
     var element, material, overdraw;
     var isQuad;
-    for ( var e = 0, el = _elements.length; e < el; e++ ) {
+    for ( var e = 0; e < _elements.length; e++ ) {
       element = _elements[e];
       material = element.material;
 
@@ -154,7 +154,7 @@ function Renderer( options ) {
     var intensity = 0;
     var light;
     var amount;
-    for ( var l = 0, ll = _lights.length; l < ll; l++ ) {
+    for ( var l = 0; l < _lights.length; l++ ) {
       light = _lights[l];
       _lightColor.copy( light.color );
 
