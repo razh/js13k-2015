@@ -38,6 +38,7 @@ const substitutions = {
   '.sR': '.setFromRotationMatrix',
   '.sQ': '.setFromQuaternion',
   '.sE': '.setFromEuler',
+  '.aQ': '.applyQuaternion',
   '.uQ': '.updateQuaternion',
   '.uR': '.updateRotation',
   '.nm': '.normalModel',
@@ -74,6 +75,7 @@ const substitutions = {
   '.eS': '.expandByScalar',
   '.mE': '.makeEmpty',
   '.vi': '.visible',
+  '.ge': '.geometry',
   '.ve': '.vertices',
   '.fa': '.faces',
   '.qd': '.quads',
@@ -109,7 +111,7 @@ const substitutions = {
   'cr': 'color',
   // Utils.
   '.i': '.inherits',
-  // Browserify warnings.
+  // Browserify.
   'NF': 'MODULE_NOT_FOUND',
   'N': 'Cannot find module '
 };

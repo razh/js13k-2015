@@ -35,7 +35,7 @@ Box3.prototype.expandByPoint = function( point ) {
 
 Box3.prototype.expandByScalar = function( scalar ) {
   this.min.addScalar( -scalar );
-  this.max.addScalar( scalar );
+  this.max.addScalar(  scalar );
   return this;
 };
 

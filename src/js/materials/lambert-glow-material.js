@@ -5,7 +5,6 @@ var LambertMaterial = require( './lambert-material' );
 var Filter = require( '../math/filter' );
 
 function LambertGlowMaterial( options ) {
-  options = options || {};
   LambertMaterial.call( this, options );
   this.filter = new Filter();
 }

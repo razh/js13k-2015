@@ -62,9 +62,11 @@ function Projector() {
       positionScreen.y *= invW;
       positionScreen.z *= invW;
 
-      vertex.visible = -1 <= positionScreen.x && positionScreen.x <= 1 &&
+      vertex.visible = (
+        -1 <= positionScreen.x && positionScreen.x <= 1 &&
         -1 <= positionScreen.y && positionScreen.y <= 1 &&
-        -1 <= positionScreen.z && positionScreen.z <= 1;
+        -1 <= positionScreen.z && positionScreen.z <= 1
+      );
     }
 
     function pushVertex( x, y, z ) {

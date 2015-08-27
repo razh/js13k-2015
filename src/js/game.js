@@ -53,7 +53,7 @@ Game.prototype.update = function() {
     this.onUpdate( dt );
   }
 
-  this.scene.children.forEach(function( object ) {
+  this.scene.children.map(function( object ) {
     object.update( dt );
   });
 };
