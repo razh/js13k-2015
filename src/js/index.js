@@ -44,7 +44,6 @@ function reset() {
 
   var material = new LambertMaterial({
     color: new Color( 0.8, 0.8, 0.8 ),
-    ambient: new Color( 0.5, 0.5, 0.5 ),
     diffuse: new Color( 0.5, 0.5, 0.5 ),
     overdraw: 0.5
   });
@@ -66,7 +65,6 @@ function reset() {
 
   var planeMaterial = new LambertMaterial({
     color: new Color( 0.5, 0.5, 0.5 ),
-    ambient: new Color( 0.2, 0.2, 0.2 ),
     diffuse: new Color( 0.5, 0.5, 0.5 ),
     overdraw: 0.5
   });
