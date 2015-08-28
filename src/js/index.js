@@ -14,9 +14,6 @@ var OrbitControls = require( './controls/orbit-controls' );
 
 var $ = document.querySelector.bind( document );
 
-var WIDTH = 852;
-var HEIGHT = 480;
-
 function on( el, type, listener ) {
   el.addEventListener( type, listener );
 }
@@ -25,10 +22,8 @@ function append( parent, el ) {
   parent.appendChild( el );
 }
 
-var game = new Game(
-  Math.min( window.innerWidth,  WIDTH  ),
-  Math.min( window.innerHeight, HEIGHT )
-);
+var game = new Game();
+game.setSize( window.innerWidth, window.innerHeight );
 
 var container = $( '#g' );
 append( container, game.canvas );

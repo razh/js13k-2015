@@ -5,7 +5,7 @@ var Object3D = require( './object3d' );
 var Camera = require( './camera' );
 var Renderer = require( './renderer/renderer' );
 
-function Game( width, height ) {
+function Game() {
   this.canvas = document.createElement( 'canvas' );
   this.ctx = this.canvas.getContext( '2d' );
 
@@ -14,7 +14,6 @@ function Game( width, height ) {
   this.t = 0;
 
   this.camera = new Camera( 90 );
-  this.setSize( width, height );
 
   this.scene = new Object3D();
   this.ambient = new Color();
