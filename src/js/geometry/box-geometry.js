@@ -1,27 +1,26 @@
 'use strict';
 
 module.exports = function addBoxGeometry( geometry, width, height, depth, dx, dy, dz ) {
-  // Generate building geometry.
-  // Origin is at the center of the bottom face.
   dx = dx || 0;
   dy = dy || 0;
   dz = dz || 0;
 
-  var halfWidth = width / 2;
-  var halfDepth = depth / 2;
+  var halfWidth  = width / 2;
+  var halfHeight = height / 2;
+  var halfDepth  = depth / 2;
 
   var vertices = [
     // Counterclockwise from far left.
     // Bottom.
-    -halfWidth, 0, -halfDepth,
-    -halfWidth, 0,  halfDepth,
-    halfWidth,  0,  halfDepth,
-    halfWidth,  0, -halfDepth,
+    -halfWidth, -halfHeight, -halfDepth,
+    -halfWidth, -halfHeight,  halfDepth,
+    halfWidth,  -halfHeight,  halfDepth,
+    halfWidth,  -halfHeight, -halfDepth,
     // Top.
-    -halfWidth, height, -halfDepth,
-    -halfWidth, height,  halfDepth,
-    halfWidth,  height,  halfDepth,
-    halfWidth,  height, -halfDepth
+    -halfWidth, halfHeight, -halfDepth,
+    -halfWidth, halfHeight,  halfDepth,
+    halfWidth,  halfHeight,  halfDepth,
+    halfWidth,  halfHeight, -halfDepth
   ];
 
   for ( var i = 0; i < vertices.length; i += 3 ) {
@@ -38,7 +37,9 @@ module.exports = function addBoxGeometry( geometry, width, height, depth, dx, dy
     [ 3, 0, 4, 7 ],
 
     // Top.
-    [ 4, 5, 6, 7 ]
+    [ 4, 5, 6, 7 ],
+    // Bottom.
+    [ 0, 3, 2, 1 ]
   ];
 
   return geometry.push( vertices, faces );

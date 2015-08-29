@@ -44,6 +44,7 @@ function reset() {
   });
 
   var mesh = new Mesh( buildings, material );
+  mesh.position.y = 1.25;
   scene.add( mesh );
 
   var cylinder = createCylinderGeometry( 0, 1, 2.5, 4, 1 );
