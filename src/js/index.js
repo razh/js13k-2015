@@ -1,5 +1,6 @@
 'use strict';
 
+var _ = require( './utils' );
 var Game = require( './game' );
 var Object3D = require( './object3d' );
 var Geometry = require( './geometry/geometry' );
@@ -11,6 +12,7 @@ var addBoxGeometry = require( './geometry/box-geometry' );
 var createCylinderGeometry = require( './geometry/cylinder-geometry' );
 var createPlaneGeometry = require( './geometry/plane-geometry' );
 var OrbitControls = require( './controls/orbit-controls' );
+var Spring = require( './math/spring' );
 
 var $ = document.querySelector.bind( document );
 
@@ -49,7 +51,6 @@ function reset() {
 
   var cylinder = createCylinderGeometry( 0, 1, 2.5, 4, 1 );
   var cylinderMesh = new Mesh( cylinder, material );
-  cylinderMesh.position.x = 2;
   cylinderMesh.position.y = 1.25;
   scene.add( cylinderMesh );
 
@@ -79,6 +80,21 @@ function reset() {
   game.camera.updateProjectionMatrix();
 
   new OrbitControls( game.camera );
+
+  var spring = new Spring( 170, 26 );
+  spring.set( cylinderMesh.position );
+  scene.add( spring );
+
+  cylinderMesh.update = function() {
+    _.assign( cylinderMesh.position, spring.getValues() );
+  };
+
+  setInterval(function() {
+    spring.to = {
+      x: _.randFloatSpread( 16 ),
+      z: _.randFloatSpread( 16 )
+    };
+  }, 1000 );
 }
 
 reset();
