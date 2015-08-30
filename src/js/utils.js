@@ -50,3 +50,11 @@ exports.inherits = function( child, parent ) {
   child.prototype = Object.create( parent.prototype );
   child.prototype.constructor = child;
 };
+
+exports.assign = function( target, source ) {
+  Object.keys( source ).map(function( key ) {
+    target[ key ] = source[ key ];
+  });
+
+  return target;
+};
