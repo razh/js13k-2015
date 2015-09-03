@@ -67,7 +67,7 @@ var snareNote = generateAudioBuffer( E3, snare, N2, 0.5 );
 // playSound( snareNote );
 
 var kickNote = generateAudioBuffer( toFreq( 28 ), kick, N2 + N8, 1 );
-playSound( kickNote );
+// playSound( kickNote );
 
 var bassNote = generateAudioBuffer( toFreq( 32 ), bass, N, 0.5 );
 // playSound( bassNote );
@@ -107,5 +107,66 @@ function generateNotes( fn, duration, volume ) {
 
 console.time( 'generate' );
 var snares = generateNotes( snare, N4, 0.5 );
-var basses = generateNotes( bass, N2, 0.5 );
+var kicks = generateNotes( kick, N2 + N8, 0.5 );
+var basses = generateNotes( bass, N2 + N4, 0.5 );
 console.timeEnd( 'generate' );
+
+function playNotes( sounds, bars, barDuration ) {
+  bars( sounds ).map(function( bar, barIndex ) {
+    var barDelay = barIndex * barDuration;
+    for ( var i = 0; i < bar.length; i += 2 ) {
+      var note = bar[ i ];
+      var delay = bar[ i + 1 ];
+      playSound( note, barDelay + delay );
+    }
+  });
+}
+
+playNotes( snares, function( _ ) { return [
+  [
+    _.a2, 0,
+    _.g3, N2,
+    _.g3, N2 + N4
+  ],
+  [
+    _.g3, 0,
+    _.g3, N8,
+    _.g3, N4,
+    _.g3, N4 + N8,
+    _.g3, N2
+  ]
+]; }, N );
+
+playNotes( basses, function( _ ) { return [
+  [
+    _.a4, 0,
+    _.c5, N4,
+    _.e5, N2,
+    _.c5, N2 + N4
+  ],
+  [
+    _.a4, 0,
+    _.c5, N4,
+    _.e5, N2,
+    _.e5, N2 + N8,
+    _.c5, N2 + N4
+  ],
+  [
+    _.f5, 0,
+    _.e5, N2
+  ],
+  [
+    _.d5, 0,
+    _.a4, N2
+  ],
+  [
+    _.c5, 0
+  ],
+  [
+    _.d5, 0
+  ],
+  [
+    _.b4, 0
+  ]
+
+]; }, N );
