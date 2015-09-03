@@ -71,3 +71,27 @@ playSound( kickNote );
 
 var bassNote = generateAudioBuffer( toFreq( 32 ), bass, N, 0.5 );
 // playSound( bassNote );
+
+var noteNames = [ 'c', 'cs', 'd', 'ds', 'e', 'f', 'fs', 'g', 'gs', 'a', 'as', 'b' ];
+
+function toNoteString( note ) {
+  var name = noteNames[ note % 12 ];
+  var octave = Math.floor( note / 12 ) - 1;
+  return name + octave;
+}
+
+function generateNotes( fn, duration, volume ) {
+  var notes = {};
+
+  // From A1 (21) to A6 (93).
+  for ( var i = 21; i <= 93; i++ ) {
+    notes[ toNoteString( i ) ] = generateAudioBuffer( toFreq( i ), fn, duration, volume );
+  }
+
+  return notes;
+}
+
+console.time( 'generate' );
+var snares = generateNotes( snare, N4, 0.5 );
+var basses = generateNotes( bass, N2, 0.5 );
+console.timeEnd( 'generate' );
