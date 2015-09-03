@@ -83,9 +83,23 @@ function toNoteString( note ) {
 function generateNotes( fn, duration, volume ) {
   var notes = {};
 
+  function createNoteProperty( note ) {
+    var sound;
+
+    Object.defineProperty( notes, toNoteString( note ), {
+      get: function() {
+        if ( !sound ) {
+          sound = generateAudioBuffer( toFreq( note ), fn, duration, volume );
+        }
+
+        return sound;
+      }
+    });
+  }
+
   // From A1 (21) to A6 (93).
   for ( var i = 21; i <= 93; i++ ) {
-    notes[ toNoteString( i ) ] = generateAudioBuffer( toFreq( i ), fn, duration, volume );
+    createNoteProperty( i );
   }
 
   return notes;
