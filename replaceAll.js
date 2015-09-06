@@ -105,7 +105,6 @@ const substitutions = {
   '.BS': '.BackSide',
   // Color properties.
   'am': 'ambient',
-  'df': 'diffuse',
   'em': 'emissive',
   'tC': 'strokeColor',
   'cr': 'color',

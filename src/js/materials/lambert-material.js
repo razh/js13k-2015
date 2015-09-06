@@ -8,7 +8,6 @@ function LambertMaterial( options ) {
   Material.call( this, options );
 
   options = options || {};
-  this.diffuse = options.diffuse || new Color();
   this.emissive = options.emissive || new Color();
 }
 

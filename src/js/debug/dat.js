@@ -25,7 +25,7 @@ exports.color = function( color, name ) {
 
 exports.material = function( material ) {
   exports.color( material.color, 'color' );
-  exports.color( material.diffuse, 'diffuse' );
+  exports.color( material.emissive, 'emissive' );
 };
 
 exports.light = function( light ) {
