@@ -24,6 +24,11 @@ function append( parent, el ) {
   parent.appendChild( el );
 }
 
+function create( type ) {
+  return document.createElement( type || 'div' );
+}
+
+var keys = [];
 var game = new Game();
 game.setSize( window.innerWidth, window.innerHeight );
 
@@ -100,4 +105,12 @@ game.play();
 
 on( window, 'resize', function() {
   game.setSize( window.innerWidth, window.innerHeight );
+});
+
+on( document, 'keydown', function( event ) {
+  keys[ event.keyCode ] = true;
+});
+
+on( document, 'keyup', function( event ) {
+  keys[ event.keyCode ] = false;
 });
