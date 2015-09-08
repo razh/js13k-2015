@@ -10,9 +10,11 @@ var DirectionalLight = require( './lights/directional-light' );
 var LambertMaterial = require( './materials/lambert-material' );
 var addBoxGeometry = require( './geometry/box-geometry' );
 var createCylinderGeometry = require( './geometry/cylinder-geometry' );
-var createPlaneGeometry = require( './geometry/plane-geometry' );
 var OrbitControls = require( './controls/orbit-controls' );
 var Spring = require( './math/spring' );
+var createLevel = require( './levels/level' );
+
+require( './audio/audio' );
 
 var $ = document.querySelector.bind( document );
 
@@ -39,6 +41,9 @@ var scene;
 
 function reset() {
   scene = game.scene = new Object3D();
+  scene.fogDensity = 0.04;
+
+  createLevel.createCircularLevel( scene, 8, 32 );
 
   var buildings = new Geometry();
   addBoxGeometry( buildings, 1, 2.5, 1 );
@@ -57,20 +62,6 @@ function reset() {
   var cylinderMesh = new Mesh( cylinder, material );
   cylinderMesh.position.y = 1.25;
   scene.add( cylinderMesh );
-
-  var planeGeometry = createPlaneGeometry( 16, 16, 16, 16 );
-  planeGeometry.vertices.map(function( vertex ) {
-    vertex.y = Math.random();
-  });
-  planeGeometry.computeFaceNormals();
-
-  var planeMaterial = new LambertMaterial({
-    color: new Color( 0.5, 0.5, 0.5 ),
-    overdraw: 0.5
-  });
-  var planeMesh = new Mesh( planeGeometry, planeMaterial );
-
-  scene.add( planeMesh );
 
   var light = new DirectionalLight( new Color( 1, 0.8, 0.8 ) );
   light.position.set( -4, 4, 5 );
