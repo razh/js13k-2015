@@ -23,7 +23,7 @@ function Block( width, depth ) {
   this.geometry.computeFaceNormals();
 }
 
-Block.height = 3 / 16;
+Block.height = 1 / 8;
 
 _.inherits( Block, Mesh );
 
