@@ -3,6 +3,12 @@
 var dat = require( 'dat-gui' );
 var gui = new dat.GUI();
 
+// Prevent collision with Chrome Dev Tools FPS Meter.
+var style = gui.domElement.style;
+style.left = 0;
+style.right = 'initial';
+style.float = 'left';
+
 exports.color = function( color, name ) {
   name = name || 'color';
 
