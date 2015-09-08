@@ -59,7 +59,7 @@ function bass( sample, time ) {
 }
 
 var kick = createWaveform( 0.05, 24 );
-var snare = createWaveform( 0.8, 16 );
+var snare = createWaveform( 1, 16 );
 
 var E3 = toFreq( 52 );
 
@@ -150,23 +150,5 @@ playNotes( basses, function( _ ) { return [
     _.e5, N2,
     _.e5, N2 + N8,
     _.c5, N2 + N4
-  ],
-  [
-    _.f5, 0,
-    _.e5, N2
-  ],
-  [
-    _.d5, 0,
-    _.a4, N2
-  ],
-  [
-    _.c5, 0
-  ],
-  [
-    _.d5, 0
-  ],
-  [
-    _.b4, 0
   ]
-
 ]; }, N );
