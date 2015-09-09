@@ -41,3 +41,8 @@ exports.light = function( light ) {
   gui.add( light.position, 'y', -8, 8 );
   gui.add( light.position, 'z', -8, 8 );
 };
+
+exports.spring = function( spring ) {
+  gui.add( spring, 'k', 10, 480, 10 );
+  gui.add( spring, 'b', 1, 48 );
+};
