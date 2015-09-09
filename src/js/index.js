@@ -13,6 +13,7 @@ var createCylinderGeometry = require( './geometry/cylinder-geometry' );
 var OrbitControls = require( './controls/orbit-controls' );
 var Spring = require( './math/spring' );
 var createLevel = require( './levels/level' );
+var Player = require( './gameplay/player' );
 
 require( './audio/audio' );
 
@@ -74,6 +75,14 @@ function reset() {
   game.camera.updateProjectionMatrix();
 
   new OrbitControls( game.camera );
+
+  var player = new Player();
+  player.mesh.position.x = 8;
+  scene.add( player );
+  scene.add( player.mesh );
+  game.onUpdate = function() {
+    player.mesh.position.y = Math.max( 2 * Math.cos( game.t / 200 ), 0 ) + 2.5;
+  };
 
   var spring = new Spring( 170, 26 );
   spring.set( cylinderMesh.position );
