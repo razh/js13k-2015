@@ -43,6 +43,6 @@ exports.light = function( light ) {
 };
 
 exports.spring = function( spring ) {
-  gui.add( spring, 'k', 10, 480, 10 );
+  gui.add( spring, 'k', 10, 640, 10 );
   gui.add( spring, 'b', 1, 48 );
 };

@@ -8,11 +8,11 @@ var Mesh = require( '../objects/mesh' );
 var Spring = require( '../math/spring' );
 var Vector3 = require( '../math/vector3' );
 
-var WIDTH = 0.2;
-var HEIGHT = 0.6;
+var WIDTH = 0.15;
+var HEIGHT = 0.5;
 
 var material = new LambertMaterial({
-  color: new Color( 1, 1, 1 ),
+  color: new Color( 0.7, 0.8, 1 ),
   overdraw: 0.5
 });
 
@@ -25,7 +25,7 @@ function Player() {
     geometry.vertices[ i ].y += HEIGHT / 2;
   }
 
-  this.spring = new Spring( 320, 12 );
+  this.spring = new Spring( 480, 12 );
   require( '../debug/dat' ).spring( this.spring );
   this.spring.set( this.mesh.position );
   this.target = new Vector3();

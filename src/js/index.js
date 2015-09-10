@@ -14,6 +14,7 @@ var OrbitControls = require( './controls/orbit-controls' );
 var Spring = require( './math/spring' );
 var createLevel = require( './levels/level' );
 var Player = require( './gameplay/player' );
+var fbm = require( './math/fbm' );
 
 require( './audio/audio' );
 
@@ -77,11 +78,15 @@ function reset() {
   new OrbitControls( game.camera );
 
   var player = new Player();
-  player.mesh.position.x = 8;
+  player.mesh.position.x = 8.1;
   scene.add( player );
   scene.add( player.mesh );
   game.onUpdate = function() {
-    player.mesh.position.y = Math.max( 2 * Math.cos( game.t / 200 ), 0 ) + 2.5;
+    player.mesh.position.y = (
+      Math.max( 2 * Math.cos( game.t / 200 ), 0 ) +
+      2 * ( fbm( 2, 0 ) + 1 ) +
+      0.01
+    );
   };
 
   var spring = new Spring( 170, 26 );
