@@ -5,13 +5,18 @@ var Object3D = require( './object3d' );
 var Camera = require( './camera' );
 var Renderer = require( './renderer/renderer' );
 
+var dt = 1 / 60;
+
 function Game() {
   this.canvas = document.createElement( 'canvas' );
   this.ctx = this.canvas.getContext( '2d' );
 
   this.running = false;
+  // Time in milliseconds.
   this.pt = 0;
   this.t = 0;
+  // Accumulated time (in seconds).
+  this.at = 0;
 
   this.camera = new Camera( 90 );
 
@@ -39,22 +44,26 @@ Game.prototype.tick = function() {
 
 Game.prototype.update = function() {
   this.t = Date.now();
-  var dt = this.t - this.pt;
+  var frameTime = ( this.t - this.pt ) * 1e-3;
   this.pt = this.t;
 
-  if ( dt > 1e2 ) {
-    dt = 1e2;
+  if ( frameTime > 0.25 ) {
+    frameTime = 0.25;
   }
 
-  dt *= 1e-3;
+  this.at += frameTime;
 
-  if ( this.onUpdate ) {
-    this.onUpdate( dt );
+  while ( this.at >= dt )  {
+    if ( this.onUpdate ) {
+      this.onUpdate( dt );
+    }
+
+    this.scene.children.map(function( object ) {
+      object.update( dt );
+    });
+
+    this.at -= dt;
   }
-
-  this.scene.children.map(function( object ) {
-    object.update( dt );
-  });
 };
 
 Game.prototype.draw = function() {
