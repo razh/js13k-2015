@@ -51,22 +51,26 @@ function Renderer( options ) {
   // Set default line attributes to avoid miters.
   _ctx.lineCap = _ctx.lineJoin = 'round';
 
-  this.info = {
-    render: {
-      vertices: 0,
-      faces: 0,
-      quads: 0
-    }
-  };
+  if ( process.env.NODE_ENV === 'development' ) {
+    this.info = {
+      render: {
+        vertices: 0,
+        faces: 0,
+        quads: 0
+      }
+    };
+  }
 
   this.clear = function( width, height ) {
     _ctx.clearRect( 0, 0, width, height );
   };
 
   this.render = function( scene, camera ) {
-    _this.info.render.vertices = 0;
-    _this.info.render.faces = 0;
-    _this.info.render.quads = 0;
+    if ( process.env.NODE_ENV === 'development' ) {
+      _this.info.render.vertices = 0;
+      _this.info.render.faces = 0;
+      _this.info.render.quads = 0;
+    }
 
     _canvasWidth  = _ctx.canvas.width;
     _canvasHeight = _ctx.canvas.height;
@@ -230,17 +234,23 @@ function Renderer( options ) {
       }
     }
 
-    _this.info.render.vertices += isQuad ? 4 : 3;
-
     if ( isQuad ) {
       _v3x = v3.positionScreen.x;
       _v3y = v3.positionScreen.y;
 
       drawQuad( _v0x, _v0y, _v1x, _v1y, _v2x, _v2y, _v3x, _v3y );
-      _this.info.render.quads++;
     } else {
       drawTriangle( _v0x, _v0y, _v1x, _v1y, _v2x, _v2y );
-      _this.info.render.faces++;
+    }
+
+    if ( process.env.NODE_ENV === 'development' ) {
+      _this.info.render.vertices += isQuad ? 4 : 3;
+
+      if ( isQuad ) {
+        _this.info.render.quads++;
+      } else {
+        _this.info.render.faces++;
+      }
     }
 
     if ( material instanceof LambertMaterial ) {
