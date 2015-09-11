@@ -28,7 +28,7 @@ function onError(error) {
   this.emit('end');
 }
 
-gulp.task('browser-sync', function() {
+gulp.task('browser-sync', () => {
   return browserSync.init({
     browser: [],
     port: PORT,
@@ -38,7 +38,7 @@ gulp.task('browser-sync', function() {
   });
 });
 
-gulp.task('js', function() {
+gulp.task('js', () => {
   let bundler = browserify(SOURCE_DIR + '/js/index.js',
     assign({
       debug: !production
@@ -68,7 +68,7 @@ gulp.task('js', function() {
   return rebundle();
 });
 
-gulp.task('html', function() {
+gulp.task('html', () => {
   return gulp.src(SOURCE_DIR + '/*.html')
     .pipe($.if(production, $.htmlmin({
       collapseWhitespace: true,
@@ -80,7 +80,27 @@ gulp.task('html', function() {
     .pipe($.if(!production, browserSync.reload({ stream: true })));
 });
 
-gulp.task('compress', function() {
+gulp.task('clean', () => del([BUILD_DIR]));
+
+gulp.task('watch', () => gulp.watch([SOURCE_DIR + '/*.html'], ['html']));
+
+gulp.task('default', ['clean'], cb => {
+  return runSequence(
+    ['html', 'js'],
+    ['browser-sync', 'watch'],
+    cb
+  );
+});
+
+gulp.task('build', ['clean'], cb => {
+  production = true;
+  return runSequence(
+    ['html', 'js'],
+    cb
+  );
+});
+
+gulp.task('compress', () => {
   return gulp.src(BUILD_DIR + '/**/*')
     .pipe($.zip('build.zip'))
     .pipe($.size())
@@ -89,28 +109,4 @@ gulp.task('compress', function() {
     .pipe(gulp.dest(DIST_DIR));
 });
 
-gulp.task('watch', function() {
-  gulp.watch([SOURCE_DIR + '/*.html'], ['html']);
-});
-
-gulp.task('clean', del.bind(null, [BUILD_DIR]));
-
-gulp.task('default', ['clean'], function(cb) {
-  return runSequence(
-    ['html', 'js'],
-    ['browser-sync', 'watch'],
-    cb
-  );
-});
-
-gulp.task('build', ['clean'], function(cb) {
-  production = true;
-  return runSequence(
-    ['html', 'js'],
-    cb
-  );
-});
-
-gulp.task('dist', function(cb) {
-  return runSequence('build', 'compress', cb);
-});
+gulp.task('dist', cb => runSequence('build', 'compress', cb));
