@@ -45,7 +45,7 @@ function reset() {
   scene = game.scene = new Object3D();
   scene.fogDensity = 0.04;
 
-  createLevel.createCircularLevel( scene, 8, 32 );
+  createLevel( scene, 8, 32 );
 
   var buildings = new Geometry();
   addBoxGeometry( buildings, 1, 2.5, 1 );

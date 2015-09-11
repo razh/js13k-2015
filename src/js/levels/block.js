@@ -5,7 +5,7 @@ var Color = require( '../math/color' );
 var Geometry = require( '../geometry/geometry' );
 var Mesh = require( '../objects/mesh' );
 var LambertMaterial = require( '../materials/lambert-material' );
-var createBoxGeometry = require( '../geometry/box-geometry' );
+var addBoxGeometry = require( '../geometry/box-geometry' );
 
 var material = new LambertMaterial({
   color: new Color( 1, 1, 1 ),
@@ -19,7 +19,7 @@ function Block( width, depth ) {
   this.height = Block.height;
   this.depth = depth;
 
-  createBoxGeometry( this.geometry, width, Block.height, depth );
+  addBoxGeometry( this.geometry, width, Block.height, depth );
   this.geometry.computeFaceNormals();
 }
 
