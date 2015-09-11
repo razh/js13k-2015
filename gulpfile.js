@@ -12,6 +12,7 @@ const browserSync = require('browser-sync').create();
 const bundleCollapser = require('bundle-collapser/plugin');
 const buffer = require('vinyl-buffer');
 const del = require('del');
+const envify = require('envify/custom');
 const runSequence = require('run-sequence');
 const source = require('vinyl-source-stream');
 const watchify = require('watchify');
@@ -43,6 +44,11 @@ gulp.task('js', () => {
     assign({
       debug: !production
     }, production ? null : watchify.args));
+
+  bundler.transform(envify({
+    _: 'purge',
+    NODE_ENV: production ? 'production' : 'development'
+  }));
 
   if (production) {
     bundler.plugin(bundleCollapser);
