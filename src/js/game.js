@@ -18,7 +18,7 @@ function Game() {
   // Accumulated time (in seconds).
   this.at = 0;
 
-  this.camera = new Camera( 90 );
+  this.camera = new Camera();
 
   this.scene = new Object3D();
   this.ambient = new Color();
