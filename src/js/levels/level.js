@@ -6,7 +6,9 @@ var fbm = require( '../math/fbm' );
 module.exports = function( scene, radius, radialSegments ) {
   radialSegments = radialSegments || 1;
 
-  for ( var i = 0; i <= radialSegments; i++ ) {
+  var blocks = [];
+
+  for ( var i = 0; i < radialSegments; i++ ) {
     var theta = 2 * Math.PI * ( i / radialSegments );
 
     var x = radius * Math.sin( theta );
@@ -19,5 +21,8 @@ module.exports = function( scene, radius, radialSegments ) {
     block.updateQuaternion();
 
     scene.add( block );
+    blocks.push( block );
   }
+
+  return blocks;
 };
