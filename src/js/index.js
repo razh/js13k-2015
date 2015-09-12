@@ -71,20 +71,21 @@ function reset() {
 
   game.ambient.setRGB( 0.2, 0.2, 0.2 );
 
-  game.camera.position.set( -2, 5, -2 );
+  game.camera.position.set( 0, 2, 12 );
   game.camera.lookAt( mesh.position );
+  game.camera.position.y = 5;
   game.camera.updateProjectionMatrix();
 
   new OrbitControls( game.camera );
 
   var player = new Player();
-  player.mesh.position.x = 8.1;
+  player.mesh.position.z = 8.1;
   scene.add( player );
   scene.add( player.mesh );
   game.onUpdate = function() {
     player.mesh.position.y = (
       Math.max( 2 * Math.cos( game.t / 200 ), 0 ) +
-      2 * ( fbm( 2, 0 ) + 1 ) +
+      2 * ( fbm( 0, 8 ) + 1 ) +
       0.01
     );
   };

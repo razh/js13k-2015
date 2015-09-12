@@ -19,6 +19,9 @@ function Block( width, depth ) {
   this.height = Block.height;
   this.depth = depth;
 
+  this.theta = 0;
+  this.angularDistance = 0;
+
   addBoxGeometry( this.geometry, width, Block.height, depth );
   this.geometry.computeFaceNormals();
 }
