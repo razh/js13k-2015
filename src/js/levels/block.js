@@ -7,13 +7,11 @@ var Mesh = require( '../objects/mesh' );
 var LambertMaterial = require( '../materials/lambert-material' );
 var addBoxGeometry = require( '../geometry/box-geometry' );
 
-var material = new LambertMaterial({
-  color: new Color( 1, 1, 1 ),
-  overdraw: 0.5
-});
-
 function Block( width, depth ) {
-  Mesh.call( this, new Geometry(), material );
+  Mesh.call( this, new Geometry(), new LambertMaterial({
+    color: new Color( 1, 1, 1 ),
+    overdraw: 0.5
+  }));
 
   this.width = width;
   this.height = Block.height;

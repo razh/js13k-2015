@@ -18,6 +18,8 @@ var fbm = require( './math/fbm' );
 
 require( './audio/audio' );
 
+var TWO_PI = 2 * Math.PI;
+
 var $ = document.querySelector.bind( document );
 
 function on( el, type, listener ) {
@@ -32,6 +34,14 @@ function create( type ) {
   return document.createElement( type || 'div' );
 }
 
+function modulo( n, d ) {
+  return ( ( n % d ) + d ) % d;
+}
+
+function angularDistance( a, b ) {
+  return Math.abs( modulo( b - a + Math.PI, TWO_PI ) - Math.PI );
+}
+
 var keys = [];
 var game = new Game();
 game.setSize( window.innerWidth, window.innerHeight );
@@ -39,13 +49,45 @@ game.setSize( window.innerWidth, window.innerHeight );
 var container = $( '#g' );
 append( container, game.canvas );
 
+var blocks;
+var levelRotation = 0;
+var levelRadius = 8;
+var blockCount = 32;
+
+function createControls() {
+  var minAngle = Infinity;
+  var min;
+
+  blocks.map(function( block ) {
+    var theta = ( block.theta + levelRotation ) % TWO_PI;
+    block.position.x = levelRadius * Math.sin( theta );
+    block.position.z = levelRadius * Math.cos( theta );
+    block.rotation.y = theta;
+    block.updateQuaternion();
+
+    block.material.emissive.setRGB( 0, 0, 0 );
+
+    var angle = angularDistance( theta, 0 );
+    block.angularDistance = angle;
+
+    if ( angle < minAngle ) {
+      minAngle = angle;
+      min = block;
+    }
+  });
+
+  if ( min ) {
+    min.material.emissive.setRGB( 0.3, 0.3, 0.3 );
+  }
+}
+
 var scene;
 
 function reset() {
   scene = game.scene = new Object3D();
   scene.fogDensity = 0.04;
 
-  createLevel( scene, 8, 32 );
+  blocks = createLevel( scene, levelRadius, blockCount );
 
   var buildings = new Geometry();
   addBoxGeometry( buildings, 1, 2.5, 1 );
@@ -82,12 +124,15 @@ function reset() {
   player.mesh.position.z = 8.1;
   scene.add( player );
   scene.add( player.mesh );
-  game.onUpdate = function() {
+  game.onUpdate = function( dt ) {
     player.mesh.position.y = (
       Math.max( 2 * Math.cos( game.t / 200 ), 0 ) +
       2 * ( fbm( 0, 8 ) + 1 ) +
       0.01
     );
+
+    levelRotation += dt * 0.8;
+    createControls();
   };
 
   var spring = new Spring( 170, 26 );
