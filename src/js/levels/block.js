@@ -7,6 +7,8 @@ var Mesh = require( '../objects/mesh' );
 var LambertMaterial = require( '../materials/lambert-material' );
 var addBoxGeometry = require( '../geometry/box-geometry' );
 
+var HEIGHT = 1 / 8;
+
 function sample( array ) {
   return array[ ( array.length * Math.random() ) | 0 ];
 }
@@ -30,17 +32,15 @@ function Block( width, depth ) {
   }));
 
   this.width = width;
-  this.height = Block.height;
+  this.height = HEIGHT;
   this.depth = depth;
 
   this.theta = 0;
   this.angularDistance = 0;
 
-  addBoxGeometry( this.geometry, width, Block.height, depth );
+  addBoxGeometry( this.geometry, width, HEIGHT, depth, 0 -HEIGHT / 2, 0 );
   this.geometry.computeFaceNormals();
 }
-
-Block.height = 1 / 8;
 
 _.inherits( Block, Mesh );
 

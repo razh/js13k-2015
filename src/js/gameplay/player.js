@@ -17,19 +17,18 @@ var material = new LambertMaterial({
 });
 
 function Player() {
+  var geometry = addBoxGeometry(
+    new Geometry(),
+    WIDTH, HEIGHT, WIDTH,
+    0, HEIGHT / 2, 0
+  );
 
-  var geometry = addBoxGeometry( new Geometry(), WIDTH, HEIGHT, WIDTH );
   this.mesh = new Mesh( geometry, material );
-
-  for ( var i = 0; i < 8; i++ ) {
-    geometry.vertices[ i ].y += HEIGHT / 2;
-  }
+  this.mesh.geometry.computeFaceNormals();
 
   this.spring = new Spring( 480, 12 );
   this.spring.set( this.mesh.position );
   this.target = new Vector3();
-
-  this.mesh.geometry.computeFaceNormals();
 }
 
 Player.prototype.update = function( dt ) {
