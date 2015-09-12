@@ -18,6 +18,8 @@ function Camera( fov, aspect, near, far ) {
   this.near = near || 0.1;
   this.far = far || 1000;
 
+  this.up = new Vector3().copy( Vector3.Y );
+
   this.matrixWorldInverse = new Matrix4();
   this.projectionMatrix = new Matrix4();
 
@@ -27,7 +29,7 @@ function Camera( fov, aspect, near, far ) {
 _.inherits( Camera, Object3D );
 
 Camera.prototype.lookAt = function( vector ) {
-  mt.lookAt( this.position, vector, Vector3.Y );
+  mt.lookAt( this.position, vector, this.up );
   this.quaternion.setFromRotationMatrix( mt );
 };
 
