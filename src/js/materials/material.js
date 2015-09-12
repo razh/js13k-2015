@@ -19,7 +19,7 @@ function Material( options ) {
   this.lineWidth = options.lineWidth || 0;
 
   this.fill = ( options.fill !== undefined ) ? options.fill : true;
-  this.wireframe = ( options.wireframe !== undefined ) ? options.wireframe : false;
+  this.wireframe = options.wireframe || false;
 
   this.shadowColor = options.shadowColor || new Color();
   this.shadowBlur = options.shadowBlur || 0;
