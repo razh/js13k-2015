@@ -1,6 +1,10 @@
 'use strict';
 
-module.exports = function addBoxGeometry( geometry, width, height, depth ) {
+module.exports = function addBoxGeometry( geometry, width, height, depth, dx, dy, dz ) {
+  dx = dx || 0;
+  dy = dy || 0;
+  dz = dz || 0;
+
   var halfWidth  = width / 2;
   var halfHeight = height / 2;
   var halfDepth  = depth / 2;
@@ -18,6 +22,12 @@ module.exports = function addBoxGeometry( geometry, width, height, depth ) {
     halfWidth,  halfHeight,  halfDepth,
     halfWidth,  halfHeight, -halfDepth
   ];
+
+  for ( var i = 0; i < vertices.length; i += 3 ) {
+    vertices[ i     ] += dx;
+    vertices[ i + 1 ] += dy;
+    vertices[ i + 2 ] += dz;
+  }
 
   var faces = [
     // Sides.
