@@ -51,6 +51,7 @@ const substitutions = {
   '.mS': '.multiplyScalar',
   '.uM': '.updateMatrix',
   '.rgb': '.setRGB',
+  '.fA': '.fromArray',
   '.sV': '.subVectors',
   '.pM': '.projectionMatrix',
   '.mx': /\.matrix(?!\w+)/g,

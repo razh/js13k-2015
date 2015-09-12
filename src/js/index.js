@@ -111,7 +111,7 @@ function reset() {
   light.position.set( -4, 4, 5 );
   scene.add( light );
 
-  game.ambient.setRGB( 0.3, 0.3, 0.3 );
+  game.ambient.setRGB( 0.1, 0.3, 0.4 );
 
   game.camera.position.set( 0, 2, 12 );
   game.camera.lookAt( mesh.position );

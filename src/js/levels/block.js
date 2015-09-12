@@ -7,9 +7,25 @@ var Mesh = require( '../objects/mesh' );
 var LambertMaterial = require( '../materials/lambert-material' );
 var addBoxGeometry = require( '../geometry/box-geometry' );
 
+function sample( array ) {
+  return array[ ( array.length * Math.random() ) | 0 ];
+}
+
+// Colors.
+var blockColors = [
+  // Red.
+  [ 0.7, 0.3, 0.3 ],
+  // Blue.
+  [ 0.5, 0.7, 0.8 ],
+  // Yellow.
+  [ 0.9, 0.7, 0.5 ],
+  // Pink.
+  [ 0.8, 0.7, 0.8 ]
+];
+
 function Block( width, depth ) {
   Mesh.call( this, new Geometry(), new LambertMaterial({
-    color: new Color( 1, 1, 1 ),
+    color: new Color().fromArray( sample( blockColors ) ),
     overdraw: 0.5
   }));
 
