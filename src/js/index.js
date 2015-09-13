@@ -10,10 +10,10 @@ var Vector3 = require( './math/vector3' );
 var DirectionalLight = require( './lights/directional-light' );
 var LambertMaterial = require( './materials/lambert-material' );
 var addDiamondGeometry = require( './geometry/diamond-geometry' );
-var OrbitControls = require( './controls/orbit-controls' );
 var createLevel = require( './levels/level' );
 var Player = require( './gameplay/player' );
 var fbm = require( './math/fbm' );
+var colors = require( './gameplay/colors' );
 var createSkybox = require( './gameplay/skybox' );
 var animate = require( './gameplay/animate' );
 
@@ -23,8 +23,17 @@ var TWO_PI = 2 * Math.PI;
 
 var $ = document.querySelector.bind( document );
 
+function noop() {}
+
+var _vector = new Vector3();
+var _color = new Color();
+
 function on( el, type, listener ) {
   el.addEventListener( type, listener );
+}
+
+function off( el, type, listener ) {
+  el.removeEventListener( type, listener );
 }
 
 function append( parent, el ) {
@@ -61,6 +70,7 @@ function angularDistance( a, b ) {
 
 var keys = [];
 var game = new Game();
+var isCheckingCollisions = false;
 game.setSize( window.innerWidth, window.innerHeight );
 
 var container = $( '#g' );
@@ -71,7 +81,76 @@ var levelRotation = 0;
 var levelRadius = 8;
 var blockCount = 32;
 
+var cameraStartFOV = 10;
+var cameraEndFOV = 60;
+var cameraStartZ = 32;
+var cameraEndZ = 12;
+var cameraTarget = new Vector3().copy( Vector3.Y );
+
+var rotationSpeed = Math.PI / 2;
+var previousLevelRotation = 0;
+
+var isAnimating = true;
+var isFirstPlay = true;
+var shouldUpdateColor = false;
+
 function createControls() {
+  var down = false;
+  var px;
+
+  function getX( event ) {
+    return ( event.touches && event.touches.length ) ?
+      event.touches[0].clientX :
+      event.clientX;
+  }
+
+  function start( event ) {
+    if ( isCheckingCollisions ) {
+      event.preventDefault();
+    }
+
+    px = getX( event );
+    down = true;
+  }
+
+  function move( event ) {
+    if ( !down ) {
+      return;
+    }
+
+    event.preventDefault();
+
+    if ( !isCheckingCollisions ) {
+      return;
+    }
+
+    var x = getX( event );
+    var dx = x - px;
+    px = x;
+    previousLevelRotation = levelRotation;
+    levelRotation += 2 * dx / window.innerWidth * rotationSpeed;
+  }
+
+  function end() {
+    if ( isCheckingCollisions ) {
+      event.preventDefault();
+    }
+
+    down = false;
+  }
+
+
+  on( document, 'touchstart', start );
+  on( document, 'touchmove', move );
+  on( document, 'touchend', end );
+  on( document, 'mousedown', start );
+  on( document, 'mousemove', move );
+  on( document, 'mouseup', end );
+}
+
+function getClosestBlockAtAngle( angle ) {
+  angle = angle || 0;
+
   var minAngle = Infinity;
   var min;
 
@@ -92,6 +171,12 @@ function createControls() {
       min = block;
     }
   });
+
+  return min;
+}
+
+function updateBlocks() {
+  var min = getClosestBlockAtAngle();
 
   if ( min ) {
     min.material.emissive.setRGB( 0.3, 0.3, 0.3 );
@@ -119,13 +204,19 @@ function createDiamond( scene, x, y, z, radius, top, bottom, rotation ) {
 }
 
 var scene;
+var player;
+
+createControls();
 
 function reset() {
+  isCheckingCollisions = !isFirstPlay;
   animate.reset();
+
   scene = game.scene = new Object3D();
   scene.fogDensity = 0.005;
 
   blocks = createLevel( scene, levelRadius, blockCount );
+  levelRotation = 0;
 
   // Lights.
   var light = new DirectionalLight( new Color( 1, 0.8, 0.8 ) );
@@ -136,10 +227,11 @@ function reset() {
 
   // Camera.
   var camera = game.camera;
-  camera.fov = 10;
-  camera.position.set( 0, 1, 32 );
+  camera.fov = isFirstPlay ? cameraStartFOV : cameraEndFOV;
+  camera.position.set( 0, 1, isFirstPlay ? cameraStartZ : cameraEndZ );
   camera.up.x = 0.05;
-  camera.lookAt( new Vector3( 0, 1, 0 ) );
+  cameraTarget.copy( Vector3.Y );
+  camera.lookAt( cameraTarget );
   camera.updateProjectionMatrix();
 
   // Diamonds.
@@ -153,20 +245,89 @@ function reset() {
   // Skybox.
   createSkybox( scene );
 
-  var player = new Player();
+  player = new Player();
+  player.t = 0;
+  player.mesh.position.y = 2 * fbm( 0, 8 ) + 0.01;
   player.mesh.position.z = 8.1;
   scene.add( player );
   scene.add( player.mesh );
 
+  var closestBlock = getClosestBlockAtAngle();
+  if ( closestBlock ) {
+    player.color( closestBlock.colorIndex() );
+  }
+
+  var currentHeight = 0;
+  var previousHeight = 0;
+
   game.onUpdate = function( dt ) {
     animate.update( dt );
 
-    // 180 syncs up with 90 BPM.
-    player.mesh.position.y = (
-      Math.max( 2 * Math.cos( game.t / 180 ), 0 ) +
-      2 * fbm( 0, 8 ) +
-      0.01
+    if ( isCheckingCollisions ) {
+      if ( keys[ 37 ] || keys[ 65 ] ) {
+        previousLevelRotation = levelRotation;
+        levelRotation += rotationSpeed * dt;
+      } else if ( keys[ 39 ] || keys[ 68 ] ) {
+        previousLevelRotation = levelRotation;
+        levelRotation -= rotationSpeed * dt;
+      }
+    }
+
+    // Update camera target.
+    _vector.copy( cameraTarget );
+    if ( previousLevelRotation < levelRotation ) {
+      _vector.x = -1;
+    } else if ( previousLevelRotation > levelRotation ) {
+      _vector.x = 1;
+    } else {
+      _vector.x = 0;
+    }
+
+    previousLevelRotation = levelRotation;
+    cameraTarget.lerp( _vector, 0.5 * dt );
+    camera.lookAt( cameraTarget );
+
+    updateBlocks();
+    var closestBlock = getClosestBlockAtAngle();
+
+    player.mesh.position.y += player.velocity * dt;
+    player.velocity -= 4 * dt;
+
+    currentHeight = player.mesh.position.y = Math.max(
+      player.mesh.position.y,
+      closestBlock.y + 0.01
     );
+
+    // Check for collisions.
+    if ( isCheckingCollisions ) {
+      // Check if the right color.
+      if ( player.mesh.position.y - 0.02 <= closestBlock.y ) {
+        if ( !player.mesh.material.color.equals( closestBlock.material.color ) ) {
+          Audio.playError();
+          end();
+          return;
+        } else {
+          var newColorIndex;
+          do {
+            newColorIndex = _.randInt( 0, colors.length - 1 );
+          } while (
+            _color
+              .fromArray( colors[ newColorIndex ] )
+              .equals( closestBlock.material.color )
+          );
+
+          shouldUpdateColor = true;
+          player.velocity = 4;
+        }
+      }
+
+      if ( shouldUpdateColor && previousHeight < currentHeight ) {
+        player.color( newColorIndex );
+        shouldUpdateColor = false;
+      }
+    }
+
+    previousHeight = currentHeight;
 
     var diamondTime = game.t / 1000;
     diamondCenter.position.y = diamondCenterY + 0.2 * Math.cos( diamondTime );
@@ -174,8 +335,6 @@ function reset() {
     diamondRight.position.y = diamondRightY + 0.2 * Math.cos( 0.4 * diamondTime );
 
     Audio.update( dt );
-    levelRotation -= dt * 0.8;
-    createControls();
   };
 }
 
@@ -194,29 +353,67 @@ menu.id = 'm';
 addClass( menu, 'c' );
 append( document.body, menu );
 
+function start() {
+  play();
+
+  isAnimating = true;
+
+  if ( !isFirstPlay ) {
+    reset();
+    animate(function( t ) {
+      var emissive = ( ( Math.floor( t * 16 ) % 2 ) < 1 ) ? 0 : 0.5;
+      player.mesh.material.emissive.setRGB( emissive, emissive, emissive );
+      player.mesh.material.opacity = Math.max( emissive + 0.5, 0.8 );
+    }, 3,  function startCollisions() {
+      isCheckingCollisions = true;
+      shouldUpdateColor = true;
+    });
+    return;
+  }
+
+  animate(function( t ) {
+    t = _.smootherstep( t, 0, 1 );
+
+    var camera = game.camera;
+    camera.fov = _.lerp( cameraStartFOV, cameraEndFOV, t * t * t );
+    camera.position.z = _.lerp( cameraStartZ, cameraEndZ, t );
+    camera.updateProjectionMatrix();
+  }, 1, function() {
+    isFirstPlay = false;
+    isCheckingCollisions = true;
+    shouldUpdateColor = true;
+  });
+}
+
 function play() {
   game.play();
   addClass( menu, 'h' );
 }
 
 function pause() {
-  if ( game.running ) {
+  if ( isAnimating ) {
     game.pause();
     textContent( playButton, 'Continue' );
+    off( playButton, start );
+    on( playButton, play );
     removeClass( menu, 'h' );
   }
 }
 
 function end() {
   game.pause();
-  reset();
+  textContent( playButton, 'Restart' );
+  off( playButton, play );
+  on( playButton, start );
+  removeClass( menu, 'h' );
 }
 
-var playButton = createButton( menu, 'p', 'Play', play );
+var playButton = createButton( menu, 'p', 'Play', start );
 
 reset();
-play();
-removeClass( menu, 'h' );
+game.play();
+
+on( window, 'blur', pause );
 
 on( window, 'resize', function() {
   game.setSize( window.innerWidth, window.innerHeight );
@@ -228,4 +425,9 @@ on( document, 'keydown', function( event ) {
 
 on( document, 'keyup', function( event ) {
   keys[ event.keyCode ] = false;
+
+  // Space. Resume.
+  if ( event.keyCode === 32 && !game.running ) {
+    start();
+  }
 });

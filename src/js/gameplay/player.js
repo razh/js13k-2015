@@ -1,5 +1,7 @@
 'use strict';
 
+var _ = require( '../utils' );
+var colors = require( './colors' );
 var addBoxGeometry = require( '../geometry/box-geometry' );
 var Color = require( '../math/color' );
 var Geometry = require( '../geometry/geometry' );
@@ -11,12 +13,6 @@ var Vector3 = require( '../math/vector3' );
 var WIDTH = 0.25;
 var HEIGHT = 0.7;
 
-var material = new LambertMaterial({
-  color: new Color( 1, 1, 1 ),
-  wireframe: true,
-  lineWidth: 2
-});
-
 function Player() {
   var geometry = addBoxGeometry(
     new Geometry(),
@@ -24,12 +20,19 @@ function Player() {
     0, HEIGHT / 2, 0
   );
 
-  this.mesh = new Mesh( geometry, material );
-  this.mesh.geometry.computeFaceNormals();
+  this.mesh = new Mesh( geometry, new LambertMaterial({
+    color: new Color().fromArray( _.sample( colors ) ),
+    wireframe: true,
+    lineWidth: 2
+  }));
 
   this.spring = new Spring( 480, 12 );
+
   this.spring.set( this.mesh.position );
   this.target = new Vector3();
+
+  // Y velocity.
+  this.velocity = 0;
 }
 
 Player.prototype.update = function( dt ) {
@@ -43,6 +46,12 @@ Player.prototype.update = function( dt ) {
   var x = Math.sqrt( ( WIDTH * WIDTH * HEIGHT ) / y ) / WIDTH;
 
   this.mesh.scale.set( x, y, x );
+};
+
+Player.prototype.color = function( index ) {
+  this.mesh.material.color.fromArray(
+    index !== undefined ? colors[ index ] : _.sample( colors )
+  );
 };
 
 module.exports = Player;

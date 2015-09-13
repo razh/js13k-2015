@@ -4,6 +4,8 @@ var _ = require( '../utils' );
 var Sprite = require( '../objects/sprite' );
 var SpriteCanvasMaterial = require( '../materials/sprite-canvas-material' );
 
+var radius = 32;
+
 var spriteMaterial = new SpriteCanvasMaterial();
 
 spriteMaterial.program = function program( ctx ) {
@@ -17,8 +19,6 @@ function createSprite() {
   var theta = 2 * Math.PI * Math.random();
   var u = 2 * Math.random() - 1;
   var v = Math.sqrt( 1 - u * u );
-
-  var radius = 32;
 
   sprite.position.set(
     radius * v * Math.cos( theta ),

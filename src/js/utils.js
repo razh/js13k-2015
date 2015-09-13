@@ -46,6 +46,10 @@ exports.randSign = function() {
   return Math.random() < 0.5 ? -1 : 1;
 };
 
+exports.sample = function( array ) {
+  return array[ ( array.length * Math.random() ) | 0 ];
+};
+
 exports.inherits = function( child, parent ) {
   child.prototype = Object.create( parent.prototype );
   child.prototype.constructor = child;

@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require( '../utils' );
+var colors = require( '../gameplay/colors' );
 var Color = require( '../math/color' );
 var Geometry = require( '../geometry/geometry' );
 var Mesh = require( '../objects/mesh' );
@@ -9,25 +10,11 @@ var addBoxGeometry = require( '../geometry/box-geometry' );
 
 var HEIGHT = 1 / 8;
 
-function sample( array ) {
-  return array[ ( array.length * Math.random() ) | 0 ];
-}
-
-// Colors.
-var blockColors = [
-  // Red.
-  [ 0.7, 0.3, 0.3 ],
-  // Blue.
-  [ 0.5, 0.7, 0.8 ],
-  // Yellow.
-  [ 0.9, 0.7, 0.5 ],
-  // Green.
-  [ 0.7, 0.8, 0.5 ]
-];
+var color = new Color();
 
 function Block( width, depth ) {
   Mesh.call( this, new Geometry(), new LambertMaterial({
-    color: new Color().fromArray( sample( blockColors ) ),
+    color: new Color().fromArray( _.sample( colors ) ),
     wireframe: true,
     lineWidth: 0.5
   }));
@@ -43,5 +30,15 @@ function Block( width, depth ) {
 }
 
 _.inherits( Block, Mesh );
+
+Block.prototype.colorIndex = function() {
+  for ( var i = 0; i < colors.length; i++ ) {
+    if ( this.material.color.equals( color.fromArray( colors[i] ) ) ) {
+      return i;
+    }
+  }
+
+  return -1;
+};
 
 module.exports = Block;

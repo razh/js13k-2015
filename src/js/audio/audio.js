@@ -186,42 +186,38 @@ function playMaj( _, note ) {
   ];
 }
 
+var bar = 0;
+
 function playAll( ) {
   playNotes( synths, function( _ ) {
     return [
       [
-        _.c7, B3
-      ]
-    ];
-  }, N );
+        // C4.
+        playMaj7( _, 60 ),
+        playMaj7( _, 60 ),
+        // A3.
+        playMin7( _, 57 ),
+        playMin7( _, 57 ),
+        // F3.
+        playMaj7( _, 53 ),
+        playMaj7( _, 53 ),
+        // D4.
+        playMin7( _, 62 ),
+        playMin7( _, 62 ),
 
-  playNotes( synths, function( _ ) {
-    return [
-      // C4.
-      playMaj7( _, 60 ),
-      playMaj7( _, 60 ),
-      // A3.
-      playMin7( _, 57 ),
-      playMin7( _, 57 ),
-      // F3.
-      playMaj7( _, 53 ),
-      playMaj7( _, 53 ),
-      // D4.
-      playMin7( _, 62 ),
-      playMin7( _, 62 ),
-
-      // C4.
-      playMaj7( _, 60 ),
-      playMaj7( _, 60 ),
-      // F3.
-      playMaj7( _, 53 ),
-      playMaj7( _, 53 ),
-      // D4.
-      playMin7( _, 62 ),
-      playMin7( _, 62 ),
-      // G3.
-      playMaj( _, 55 ),
-      playMaj( _, 55 ),
+        // C4.
+        playMaj7( _, 60 ),
+        playMaj7( _, 60 ),
+        // F3.
+        playMaj7( _, 53 ),
+        playMaj7( _, 53 ),
+        // D4.
+        playMin7( _, 62 ),
+        playMin7( _, 62 ),
+        // G3.
+        playMaj( _, 55 ),
+        playMaj( _, 55 )
+      ][ bar ]
     ];
   }, N );
 }
@@ -234,9 +230,23 @@ module.exports = {
   update: function( dt ) {
     time += dt * 1e3;
 
-    if ( time >= 16 * NOTE ) {
+    if ( time >= NOTE ) {
+      bar = ( bar + 1 ) % 16;
       playAll();
       time = 0;
     }
+  },
+
+  reset: function() {
+    bar = 0;
+    time = 0;
+  },
+
+  playError: function() {
+    playNotes( synths, function( _ ) {
+      return [
+        playMin7( _, 33 ),
+      ];
+    }, N );
   }
 };

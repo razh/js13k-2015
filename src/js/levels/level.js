@@ -14,8 +14,10 @@ module.exports = function( scene, radius, radialSegments ) {
     var x = radius * Math.sin( theta );
     var z = radius * Math.cos( theta );
 
-    var block = new Block( 1, 1 );
-    block.position.set( x, 2 * fbm( x, z ), z );
+    var block = new Block( 1.4, 1 );
+    var y = 2 * fbm( x, z );
+    block.position.set( x, y, z );
+    block.y = y;
     block.rotation.y = theta;
     block.theta = theta;
     block.updateQuaternion();
