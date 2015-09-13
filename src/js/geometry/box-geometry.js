@@ -42,5 +42,9 @@ module.exports = function addBoxGeometry( geometry, width, height, depth, dx, dy
     [ 0, 3, 2, 1 ]
   ];
 
-  return geometry.push( vertices, faces );
+  geometry
+    .push( vertices, faces )
+    .computeFaceNormals();
+
+  return geometry;
 };

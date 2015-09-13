@@ -9,10 +9,8 @@ var Color = require( './math/color' );
 var Vector3 = require( './math/vector3' );
 var DirectionalLight = require( './lights/directional-light' );
 var LambertMaterial = require( './materials/lambert-material' );
-var addBoxGeometry = require( './geometry/box-geometry' );
-var createCylinderGeometry = require( './geometry/cylinder-geometry' );
+var addDiamondGeometry = require( './geometry/diamond-geometry' );
 var OrbitControls = require( './controls/orbit-controls' );
-var Spring = require( './math/spring' );
 var createLevel = require( './levels/level' );
 var Player = require( './gameplay/player' );
 var fbm = require( './math/fbm' );
@@ -103,27 +101,19 @@ var material = new LambertMaterial({
   overdraw: 0.5
 });
 
-function addDiamond( scene, x, y, z, width, height, rotation ) {
-  rotation = rotation || 0;
+function createDiamond( scene, x, y, z, radius, top, bottom, rotation ) {
+  var mesh = new Mesh(
+    addDiamondGeometry( new Geometry(), radius, top, bottom, 4 ),
+    material
+  );
 
-  var geometry = createCylinderGeometry( 0, width, height, 4, 1, true );
-  var halfHeight = height / 2;
+  mesh.position.set( x, y, z );
+  mesh.rotation.y = rotation;
+  mesh.updateQuaternion();
 
-  var topMesh = new Mesh( geometry, material );
-  // Add epsilon to avoid rendering errors.
-  topMesh.position.set( x, y + halfHeight + 1e-3, z );
-  topMesh.rotation.y = rotation;
-  topMesh.updateQuaternion();
-  scene.add( topMesh );
+  scene.add( mesh );
 
-  var bottomMesh = new Mesh( geometry, material );
-  bottomMesh.position.set( x, y - halfHeight, z );
-  bottomMesh.rotation.y = rotation;
-  bottomMesh.rotation.z = Math.PI;
-  bottomMesh.updateQuaternion();
-  scene.add( bottomMesh );
-
-  return [ topMesh, bottomMesh ];
+  return mesh;
 }
 
 var scene;
@@ -150,9 +140,9 @@ function reset() {
   camera.updateProjectionMatrix();
 
   // Diamonds.
-  addDiamond( scene, 0, -2, 0.5, 1.8, 5, 0.2 );
-  addDiamond( scene, -2.7, -1.8, -2, 1.5, 2.8, 0.3 );
-  addDiamond( scene, 2.3, -2.4, -2.5, 1.7, 4.3, 0.1 );
+  createDiamond( scene, 0, -2, 0.5, 1.8, 5, 6, 0.2 );
+  createDiamond( scene, -2.7, -1.8, -2, 1.5, 2.8, 4, 0.3 );
+  createDiamond( scene, 2.3, -2.4, -2.5, 1.7, 4.3, 5, 0.1 );
 
   var player = new Player();
   player.mesh.position.z = 8.1;

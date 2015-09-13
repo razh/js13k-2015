@@ -40,7 +40,6 @@ function Block( width, depth ) {
   this.angularDistance = 0;
 
   addBoxGeometry( this.geometry, width, HEIGHT, depth, 0 -HEIGHT / 2, 0 );
-  this.geometry.computeFaceNormals();
 }
 
 _.inherits( Block, Mesh );
