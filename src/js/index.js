@@ -15,6 +15,7 @@ var createLevel = require( './levels/level' );
 var Player = require( './gameplay/player' );
 var fbm = require( './math/fbm' );
 var createSkybox = require( './gameplay/skybox' );
+var animate = require( './gameplay/animate' );
 
 require( './audio/audio' );
 
@@ -120,6 +121,7 @@ function createDiamond( scene, x, y, z, radius, top, bottom, rotation ) {
 var scene;
 
 function reset() {
+  animate.reset();
   scene = game.scene = new Object3D();
   scene.fogDensity = 0.005;
 
@@ -155,9 +157,11 @@ function reset() {
   player.mesh.position.z = 8.1;
   scene.add( player );
   scene.add( player.mesh );
+
   game.onUpdate = function( dt ) {
+    animate.update( dt );
+
     player.mesh.position.y = (
-      Math.max( 2 * Math.cos( game.t / 200 ), 0 ) +
       2 * fbm( 0, 8 ) +
       0.01
     );
