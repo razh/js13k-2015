@@ -226,27 +226,25 @@ var time = 0;
 
 playAll();
 
-module.exports = {
-  update: function( dt ) {
-    time += dt * 1e3;
+exports.update = function( dt ) {
+  time += dt * 1e3;
 
-    if ( time >= NOTE ) {
-      bar = ( bar + 1 ) % 16;
-      playAll();
-      time = 0;
-    }
-  },
-
-  reset: function() {
-    bar = 0;
+  if ( time >= NOTE ) {
+    bar = ( bar + 1 ) % 16;
+    playAll();
     time = 0;
-  },
-
-  playError: function() {
-    playNotes( synths, function( _ ) {
-      return [
-        playMin7( _, 33 ),
-      ];
-    }, N );
   }
+};
+
+exports.reset = function() {
+  bar = 0;
+  time = 0;
+};
+
+exports.playError = function() {
+  playNotes( synths, function( _ ) {
+    return [
+      playMin7( _, 33 ),
+    ];
+  }, N );
 };
