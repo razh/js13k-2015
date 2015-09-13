@@ -21,14 +21,15 @@ var blockColors = [
   [ 0.5, 0.7, 0.8 ],
   // Yellow.
   [ 0.9, 0.7, 0.5 ],
-  // Pink.
-  [ 0.8, 0.7, 0.8 ]
+  // Green.
+  [ 0.7, 0.8, 0.5 ]
 ];
 
 function Block( width, depth ) {
   Mesh.call( this, new Geometry(), new LambertMaterial({
     color: new Color().fromArray( sample( blockColors ) ),
-    overdraw: 0.5
+    wireframe: true,
+    lineWidth: 0.5
   }));
 
   this.width = width;

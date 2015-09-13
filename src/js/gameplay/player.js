@@ -12,8 +12,9 @@ var WIDTH = 0.25;
 var HEIGHT = 0.7;
 
 var material = new LambertMaterial({
-  color: new Color( 0.7, 0.8, 1 ),
-  overdraw: 0.5
+  color: new Color( 1, 1, 1 ),
+  wireframe: true,
+  lineWidth: 2
 });
 
 function Player() {
