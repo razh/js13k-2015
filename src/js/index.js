@@ -140,9 +140,13 @@ function reset() {
   camera.updateProjectionMatrix();
 
   // Diamonds.
-  createDiamond( scene, 0, -2, 0.5, 1.8, 5, 6, 0.2 );
-  createDiamond( scene, -2.7, -1.8, -2, 1.5, 2.8, 4, 0.3 );
-  createDiamond( scene, 2.3, -2.4, -2.5, 1.7, 4.3, 5, 0.1 );
+  var diamondCenterY = -2;
+  var diamondLeftY = -1.8;
+  var diamondRightY = -2.4;
+  var diamondCenter = createDiamond( scene, 0, diamondCenterY, 0.5, 1.8, 5, 6, 0.2 );
+  var diamondLeft = createDiamond( scene, -2.7, diamondLeftY, -2, 1.5, 2.8, 4, 0.3 );
+  var diamondRight = createDiamond( scene, 2.3, diamondRightY, -2.5, 1.7, 4.3, 5, 0.1 );
+
 
   var player = new Player();
   player.mesh.position.z = 8.1;
@@ -154,6 +158,11 @@ function reset() {
       2 * fbm( 0, 8 ) +
       0.01
     );
+
+    var diamondTime = game.t / 1000;
+    diamondCenter.position.y = diamondCenterY + 0.2 * Math.cos( diamondTime );
+    diamondLeft.position.y = diamondLeftY + 0.1 * Math.cos( 0.8 * diamondTime + 1 );
+    diamondRight.position.y = diamondRightY + 0.2 * Math.cos( 0.4 * diamondTime );
 
     levelRotation -= dt * 0.8;
     createControls();
