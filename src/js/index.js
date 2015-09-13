@@ -31,8 +31,24 @@ function append( parent, el ) {
   parent.appendChild( el );
 }
 
+function prepend( parent, el ) {
+  parent.insertBefore( el, parent.firstChild );
+}
+
 function create( type ) {
   return document.createElement( type || 'div' );
+}
+
+function textContent( el, text ) {
+  el.textContent = text;
+}
+
+function addClass( el, className ) {
+  el.classList.add( className );
+}
+
+function removeClass( el, className ) {
+  el.classList.remove( className );
 }
 
 function modulo( n, d ) {
@@ -154,8 +170,44 @@ function reset() {
   };
 }
 
+function createButton( el, id, text, action ) {
+  var button = create( 'button' );
+  button.id = id;
+  textContent( button, text );
+  on( button, 'click', action );
+  prepend( el, button );
+  return button;
+}
+
+// Create menu.
+var menu = create();
+menu.id = 'm';
+addClass( menu, 'c' );
+append( document.body, menu );
+
+function play() {
+  game.play();
+  addClass( menu, 'h' );
+}
+
+function pause() {
+  if ( game.running ) {
+    game.pause();
+    textContent( playButton, 'Continue' );
+    removeClass( menu, 'h' );
+  }
+}
+
+function end() {
+  game.pause();
+  reset();
+}
+
+var playButton = createButton( menu, 'p', 'Play', play );
+
 reset();
-game.play();
+play();
+removeClass( menu, 'h' );
 
 on( window, 'resize', function() {
   game.setSize( window.innerWidth, window.innerHeight );

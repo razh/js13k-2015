@@ -4,13 +4,73 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
 <style>
   body {
     margin: 0;
-    background: #000;
+    background: #023;
+    color: #fff;
+    overflow: hidden;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Center children. */
+  .c {
+    display: -webkit-flex;
+    display: flex;
+
+    -webkit-align-items: center;
+    align-items: center;
+
+    -webkit-justify-content: center;
+    justify-content: center;
+  }
+
+  /* Menu */
+  #m {
+    position: absolute;
+    z-index: 1;
+
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  /* Hidden class. */
+  .h {
+    display: none;
+  }
+
+  button {
+    padding: 0.3em 1.8em;
+    outline: 0;
+    border: 3px solid #fff;
+    border-radius: 5em;
+
+    background: none;
+    color: #fff;
+    font: 32px Trebuchet MS, Verdana, Geneva, sans-serif;
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  button:active,
+  button:focus {
+    background: #fff;
+    color: #023;
   }
 </style>
 
-<body>
+<body ontouchstart="">
   <div id="g"></div>
   <script src="./js/bundle.js"></script>
