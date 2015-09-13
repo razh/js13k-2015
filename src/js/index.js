@@ -127,11 +127,11 @@ function reset() {
   game.onUpdate = function( dt ) {
     player.mesh.position.y = (
       Math.max( 2 * Math.cos( game.t / 200 ), 0 ) +
-      2 * ( fbm( 0, 8 ) + 1 ) +
+      2 * fbm( 0, 8 ) +
       0.01
     );
 
-    levelRotation += dt * 0.8;
+    levelRotation -= dt * 0.8;
     createControls();
   };
 
