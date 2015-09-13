@@ -14,7 +14,7 @@ exports.clamp = function( x, min, max ) {
 
 exports.smoothstep = function( x, min, max ) {
   if ( x <= min ) return 0;
-  if ( x >= min ) return 1;
+  if ( x >= max ) return 1;
 
   x = ( x - min ) / ( max - min );
 
@@ -23,7 +23,7 @@ exports.smoothstep = function( x, min, max ) {
 
 exports.smootherstep = function( x, min, max ) {
   if ( x <= min ) return 0;
-  if ( x >= min ) return 1;
+  if ( x >= max ) return 1;
 
   x = ( x - min ) / ( max - min );
 
