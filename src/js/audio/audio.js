@@ -86,7 +86,7 @@ function generateNotes( fn, duration, volume ) {
   function createNoteProperty( note ) {
     var sound;
 
-    Object.defineProperty( notes, toNoteString( note ), {
+    var descriptor = {
       get: function() {
         if ( !sound ) {
           sound = generateAudioBuffer( toFreq( note ), fn, duration, volume );
@@ -94,11 +94,14 @@ function generateNotes( fn, duration, volume ) {
 
         return sound;
       }
-    });
+    };
+
+    Object.defineProperty( notes, note, descriptor );
+    Object.defineProperty( notes, toNoteString( note ), descriptor );
   }
 
-  // From A1 (21) to A6 (93).
-  for ( var i = 21; i <= 93; i++ ) {
+  // From A1 (21) to A7 (105).
+  for ( var i = 21; i <= 105; i++ ) {
     createNoteProperty( i );
   }
 
