@@ -48,9 +48,6 @@ function Renderer( options ) {
     return;
   }
 
-  // Set default line attributes to avoid miters.
-  _ctx.lineCap = _ctx.lineJoin = 'round';
-
   if ( process.env.NODE_ENV === 'development' ) {
     this.info = {
       render: {
@@ -80,6 +77,12 @@ function Renderer( options ) {
     this.clear( _canvasWidth, _canvasHeight );
 
     _ctx.save();
+
+    // Set default line attributes to avoid miters.
+    var round = 'round';
+
+    _ctx.lineCap = round;
+    _ctx.lineJoin = round;
 
     _ctx.setTransform( 1, 0, 0, -1, 0, _canvasHeight );
     _ctx.translate( _canvasWidthHalf, _canvasHeightHalf );
