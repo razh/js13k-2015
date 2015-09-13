@@ -6,6 +6,7 @@ var Object3D = require( './object3d' );
 var Geometry = require( './geometry/geometry' );
 var Mesh = require( './objects/mesh' );
 var Color = require( './math/color' );
+var Vector3 = require( './math/vector3' );
 var DirectionalLight = require( './lights/directional-light' );
 var LambertMaterial = require( './materials/lambert-material' );
 var addBoxGeometry = require( './geometry/box-geometry' );
@@ -81,44 +82,61 @@ function createControls() {
   }
 }
 
+var material = new LambertMaterial({
+  color: new Color( 0.8, 0.8, 0.8 ),
+  overdraw: 0.5
+});
+
+function addDiamond( scene, x, y, z, width, height, rotation ) {
+  rotation = rotation || 0;
+
+  var geometry = createCylinderGeometry( 0, width, height, 4, 1, true );
+  var halfHeight = height / 2;
+
+  var topMesh = new Mesh( geometry, material );
+  // Add epsilon to avoid rendering errors.
+  topMesh.position.set( x, y + halfHeight + 1e-3, z );
+  topMesh.rotation.y = rotation;
+  topMesh.updateQuaternion();
+  scene.add( topMesh );
+
+  var bottomMesh = new Mesh( geometry, material );
+  bottomMesh.position.set( x, y - halfHeight, z );
+  bottomMesh.rotation.y = rotation;
+  bottomMesh.rotation.z = Math.PI;
+  bottomMesh.updateQuaternion();
+  scene.add( bottomMesh );
+
+  return [ topMesh, bottomMesh ];
+}
+
 var scene;
 
 function reset() {
   scene = game.scene = new Object3D();
-  scene.fogDensity = 0.04;
+  scene.fogDensity = 0.005;
 
   blocks = createLevel( scene, levelRadius, blockCount );
 
-  var buildings = new Geometry();
-  addBoxGeometry( buildings, 1, 2.5, 1 );
-  buildings.computeFaceNormals();
-
-  var material = new LambertMaterial({
-    color: new Color( 0.8, 0.8, 0.8 ),
-    overdraw: 0.5
-  });
-
-  var mesh = new Mesh( buildings, material );
-  mesh.position.y = 1.25;
-  scene.add( mesh );
-
-  var cylinder = createCylinderGeometry( 0, 1, 2.5, 4, 1 );
-  var cylinderMesh = new Mesh( cylinder, material );
-  cylinderMesh.position.y = 1.25;
-  scene.add( cylinderMesh );
-
+  // Lights.
   var light = new DirectionalLight( new Color( 1, 0.8, 0.8 ) );
   light.position.set( -4, 4, 5 );
   scene.add( light );
 
   game.ambient.setRGB( 0.1, 0.3, 0.4 );
 
-  game.camera.position.set( 0, 2, 12 );
-  game.camera.lookAt( mesh.position );
-  game.camera.position.y = 5;
-  game.camera.updateProjectionMatrix();
+  // Camera.
+  var camera = game.camera;
+  camera.fov = 10;
+  camera.position.set( 0, 1, 32 );
+  camera.up.x = 0.05;
+  camera.lookAt( new Vector3( 0, 1, 0 ) );
+  camera.updateProjectionMatrix();
 
-  new OrbitControls( game.camera );
+  // Diamonds.
+  addDiamond( scene, 0, -2, 0.5, 1.8, 5, 0.2 );
+  addDiamond( scene, -2.7, -1.8, -2, 1.5, 2.8, 0.3 );
+  addDiamond( scene, 2.3, -2.4, -2.5, 1.7, 4.3, 0.1 );
 
   var player = new Player();
   player.mesh.position.z = 8.1;
@@ -134,21 +152,6 @@ function reset() {
     levelRotation -= dt * 0.8;
     createControls();
   };
-
-  var spring = new Spring( 170, 26 );
-  spring.set( cylinderMesh.position );
-  scene.add( spring );
-
-  cylinderMesh.update = function() {
-    _.assign( cylinderMesh.position, spring.getValues() );
-  };
-
-  setInterval(function() {
-    spring.to = {
-      x: _.randFloatSpread( 16 ),
-      z: _.randFloatSpread( 16 )
-    };
-  }, 1000 );
 }
 
 reset();
