@@ -6,6 +6,15 @@ var AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioContext = new AudioContext();
 var sampleRate = audioContext.sampleRate;
 
+// Lower sample rate for distortion effect.
+// Detect lowest desired sample rate (Safari does not implement below 22050).
+try {
+  audioContext.createBuffer( 1, 1, sampleRate / 14 );
+  sampleRate /= 14;
+} catch (error) {
+  sampleRate = 22050;
+}
+
 function toFreq( note ) {
   // A4 is 69.
   return Math.pow( 2, ( note - 69 ) / 12 ) * 440;
