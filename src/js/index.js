@@ -14,6 +14,7 @@ var OrbitControls = require( './controls/orbit-controls' );
 var createLevel = require( './levels/level' );
 var Player = require( './gameplay/player' );
 var fbm = require( './math/fbm' );
+var createSkybox = require( './gameplay/skybox' );
 
 require( './audio/audio' );
 
@@ -147,6 +148,8 @@ function reset() {
   var diamondLeft = createDiamond( scene, -2.7, diamondLeftY, -2, 1.5, 2.8, 4, 0.3 );
   var diamondRight = createDiamond( scene, 2.3, diamondRightY, -2.5, 1.7, 4.3, 5, 0.1 );
 
+  // Skybox.
+  createSkybox( scene );
 
   var player = new Player();
   player.mesh.position.z = 8.1;
