@@ -1,7 +1,5 @@
 'use strict';
 
-var _ = require( '../utils' );
-
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioContext = new AudioContext();
 var sampleRate = audioContext.sampleRate;
@@ -41,7 +39,7 @@ function generateAudioBuffer( freq, fn, duration, volume ) {
   return buffer;
 }
 
-var BPM = 140;
+var BPM = 90;
 var NOTE = 2 * 60 / BPM * 1000;
 
 var N = 1e-3 * NOTE;
@@ -49,16 +47,16 @@ var N2 = N / 2;
 var N4 = N2 / 2;
 var N8 = N4 / 2;
 
+var B1 = N8;
+var B2 = N4;
+var B3 = N4 + N8;
+var B4 = N2;
+var B5 = N2 + N8;
+var B6 = N2 + N4;
+var B7 = N2 + N4 + N8;
+
 function sine( sample ) {
   return Math.sin( sample * 2  * Math.PI );
-}
-
-function createWaveform( noise, decay ) {
-  return function waveform( sample, time ) {
-    var wave = _.clamp( sine( sample ) + _.randFloatSpread( noise ), -1, 1 );
-    var env = Math.exp( -time * decay );
-    return wave * env;
-  };
 }
 
 function bass( sample, time ) {
@@ -66,20 +64,6 @@ function bass( sample, time ) {
   var env = Math.exp( -time * 8 );
   return wave * env;
 }
-
-var kick = createWaveform( 0.05, 24 );
-var snare = createWaveform( 1, 16 );
-
-var E3 = toFreq( 52 );
-
-var snareNote = generateAudioBuffer( E3, snare, N2, 0.5 );
-// playSound( snareNote );
-
-var kickNote = generateAudioBuffer( toFreq( 28 ), kick, N2 + N8, 1 );
-// playSound( kickNote );
-
-var bassNote = generateAudioBuffer( toFreq( 32 ), bass, N, 0.5 );
-// playSound( bassNote );
 
 var noteNames = [ 'c', 'cs', 'd', 'ds', 'e', 'f', 'fs', 'g', 'gs', 'a', 'as', 'b' ];
 
@@ -117,11 +101,7 @@ function generateNotes( fn, duration, volume ) {
   return notes;
 }
 
-console.time( 'generate' );
-var snares = generateNotes( snare, N4, 0.5 );
-var kicks = generateNotes( kick, N2 + N8, 0.5 );
-var basses = generateNotes( bass, N2 + N4, 0.5 );
-console.timeEnd( 'generate' );
+var synths = generateNotes( bass, N, 0.1 );
 
 function playNotes( sounds, bars, barDuration ) {
   bars( sounds ).map(function( bar, barIndex ) {
@@ -134,33 +114,129 @@ function playNotes( sounds, bars, barDuration ) {
   });
 }
 
-playNotes( snares, function( _ ) { return [
-  [
-    _.a2, 0,
-    _.g3, N2,
-    _.g3, N2 + N4
-  ],
-  [
-    _.g3, 0,
-    _.g3, N8,
-    _.g3, N4,
-    _.g3, N4 + N8,
-    _.g3, N2
-  ]
-]; }, N );
+function playMaj7( _, note ) {
+  var octave = note + 24;
 
-playNotes( basses, function( _ ) { return [
-  [
-    _.a4, 0,
-    _.c5, N4,
-    _.e5, N2,
-    _.c5, N2 + N4
-  ],
-  [
-    _.a4, 0,
-    _.c5, N4,
-    _.e5, N2,
-    _.e5, N2 + N8,
-    _.c5, N2 + N4
-  ]
-]; }, N );
+  return [
+    _[ note      ], 0,
+    _[ note +  4 ], B1,
+    _[ note +  7 ], B2,
+    _[ note + 11 ], B3,
+    _[ note + 12 ], B4,
+    _[ note + 11 ], B5,
+    _[ note +  7 ], B6,
+    _[ note +  4 ], B7,
+
+    _[ octave      ], 0,
+    // _[ octave +  4 ], B1,
+    _[ octave +  7 ], B2,
+    // _[ octave + 11 ], B3,
+    _[ octave + 12 ], B4,
+    // _[ octave + 11 ], B5,
+    _[ octave +  7 ], B6,
+    // _[ octave +  4 ], B7
+  ];
+}
+
+function playMin7( _, note ) {
+  var octave = note + 24;
+
+  return [
+    _[ note      ], 0,
+    _[ note +  3 ], B1,
+    _[ note +  7 ], B2,
+    _[ note + 10 ], B3,
+    _[ note + 12 ], B4,
+    _[ note + 10 ], B5,
+    _[ note +  7 ], B6,
+    _[ note +  3 ], B7,
+
+    _[ octave      ], 0,
+    // _[ octave +  3 ], B1,
+    _[ octave +  7 ], B2,
+    // _[ octave + 10 ], B3,
+    _[ octave + 12 ], B4,
+    // _[ octave + 10 ], B5,
+    _[ octave +  7 ], B6,
+    // _[ octave +  3 ], B7
+  ];
+}
+
+function playMaj( _, note ) {
+  var octave = note + 24;
+
+  return [
+    _[ note      ], 0,
+    _[ note +  4 ], B1,
+    _[ note +  7 ], B2,
+    _[ note + 12 ], B3,
+    _[ note + 16 ], B4,
+    _[ note + 12 ], B5,
+    _[ note + 12 ], B6,
+    _[ note +  7 ], B7,
+
+    _[ octave      ], 0,
+    // _[ octave +  4 ], B1,
+    _[ octave +  7 ], B2,
+    // _[ octave + 12 ], B3,
+    _[ octave + 16 ], B4,
+    // _[ octave + 12 ], B5,
+    _[ octave +  7 ], B6,
+    // _[ octave +  4 ], B7
+  ];
+}
+
+function playAll( ) {
+  playNotes( synths, function( _ ) {
+    return [
+      [
+        _.c7, B3
+      ]
+    ];
+  }, N );
+
+  playNotes( synths, function( _ ) {
+    return [
+      // C4.
+      playMaj7( _, 60 ),
+      playMaj7( _, 60 ),
+      // A3.
+      playMin7( _, 57 ),
+      playMin7( _, 57 ),
+      // F3.
+      playMaj7( _, 53 ),
+      playMaj7( _, 53 ),
+      // D4.
+      playMin7( _, 62 ),
+      playMin7( _, 62 ),
+
+      // C4.
+      playMaj7( _, 60 ),
+      playMaj7( _, 60 ),
+      // F3.
+      playMaj7( _, 53 ),
+      playMaj7( _, 53 ),
+      // D4.
+      playMin7( _, 62 ),
+      playMin7( _, 62 ),
+      // G3.
+      playMaj( _, 55 ),
+      playMaj( _, 55 ),
+    ];
+  }, N );
+}
+
+var time = 0;
+
+playAll();
+
+module.exports = {
+  update: function( dt ) {
+    time += dt * 1e3;
+
+    if ( time >= 16 * NOTE ) {
+      playAll();
+      time = 0;
+    }
+  }
+};

@@ -17,7 +17,7 @@ var fbm = require( './math/fbm' );
 var createSkybox = require( './gameplay/skybox' );
 var animate = require( './gameplay/animate' );
 
-require( './audio/audio' );
+var Audio = require( './audio/audio' );
 
 var TWO_PI = 2 * Math.PI;
 
@@ -161,7 +161,9 @@ function reset() {
   game.onUpdate = function( dt ) {
     animate.update( dt );
 
+    // 180 syncs up with 90 BPM.
     player.mesh.position.y = (
+      Math.max( 2 * Math.cos( game.t / 180 ), 0 ) +
       2 * fbm( 0, 8 ) +
       0.01
     );
@@ -171,6 +173,7 @@ function reset() {
     diamondLeft.position.y = diamondLeftY + 0.1 * Math.cos( 0.8 * diamondTime + 1 );
     diamondRight.position.y = diamondRightY + 0.2 * Math.cos( 0.4 * diamondTime );
 
+    Audio.update( dt );
     levelRotation -= dt * 0.8;
     createControls();
   };
