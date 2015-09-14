@@ -70,7 +70,6 @@ function angularDistance( a, b ) {
 
 var keys = [];
 var game = new Game();
-var isCheckingCollisions = false;
 game.setSize( window.innerWidth, window.innerHeight );
 
 var container = $( '#g' );
@@ -90,8 +89,9 @@ var cameraTarget = new Vector3().copy( Vector3.Y );
 var rotationSpeed = Math.PI / 2;
 var previousLevelRotation = 0;
 
-var isAnimating = true;
+// State.
 var isFirstPlay = true;
+var isCheckingCollisions = false;
 var shouldUpdateColor = false;
 
 function createControls() {
@@ -105,7 +105,7 @@ function createControls() {
   }
 
   function start( event ) {
-    if ( isCheckingCollisions ) {
+    if ( game.running && isCheckingCollisions ) {
       event.preventDefault();
     }
 
@@ -132,7 +132,7 @@ function createControls() {
   }
 
   function end() {
-    if ( isCheckingCollisions ) {
+    if ( game.running &&isCheckingCollisions ) {
       event.preventDefault();
     }
 
@@ -257,9 +257,6 @@ function reset() {
     player.color( closestBlock.colorIndex() );
   }
 
-  var currentHeight = 0;
-  var previousHeight = 0;
-
   game.onUpdate = function( dt ) {
     animate.update( dt );
 
@@ -293,15 +290,21 @@ function reset() {
     player.mesh.position.y += player.velocity * dt;
     player.velocity -= 4 * dt;
 
-    currentHeight = player.mesh.position.y = Math.max(
+    player.mesh.position.y = Math.max(
       player.mesh.position.y,
       closestBlock.y + 0.01
     );
 
+    var isColliding = player.mesh.position.y - 0.02 <= closestBlock.y;
+
+    if ( isColliding ) {
+      player.velocity = 4;
+    }
+
     // Check for collisions.
     if ( isCheckingCollisions ) {
       // Check if the right color.
-      if ( player.mesh.position.y - 0.02 <= closestBlock.y ) {
+      if ( isColliding ) {
         if ( !player.mesh.material.color.equals( closestBlock.material.color ) ) {
           Audio.playError();
           end();
@@ -317,17 +320,14 @@ function reset() {
           );
 
           shouldUpdateColor = true;
-          player.velocity = 4;
         }
       }
 
-      if ( shouldUpdateColor && previousHeight < currentHeight ) {
+      if ( shouldUpdateColor && player.velocity < 0 ) {
         player.color( newColorIndex );
         shouldUpdateColor = false;
       }
     }
-
-    previousHeight = currentHeight;
 
     var diamondTime = game.t / 1000;
     diamondCenter.position.y = diamondCenterY + 0.2 * Math.cos( diamondTime );
@@ -355,8 +355,6 @@ append( document.body, menu );
 
 function start() {
   play();
-
-  isAnimating = true;
 
   if ( !isFirstPlay ) {
     reset();
@@ -391,7 +389,7 @@ function play() {
 }
 
 function pause() {
-  if ( isAnimating ) {
+  if ( game.running ) {
     game.pause();
     textContent( playButton, 'Continue' );
     off( playButton, 'click', start );
@@ -406,6 +404,7 @@ function end() {
   off( playButton, 'click', play );
   on( playButton, 'click', start );
   removeClass( menu, 'h' );
+  isCheckingCollisions = false;
 }
 
 var playButton = createButton( menu, 'p', 'Play', start );
@@ -417,6 +416,7 @@ on( window, 'blur', pause );
 
 on( window, 'resize', function() {
   game.setSize( window.innerWidth, window.innerHeight );
+  game.draw();
 });
 
 on( document, 'keydown', function( event ) {
@@ -427,7 +427,7 @@ on( document, 'keyup', function( event ) {
   keys[ event.keyCode ] = false;
 
   // Space. Resume.
-  if ( event.keyCode === 32 && !game.running ) {
+  if ( event.keyCode === 32 && !isCheckingCollisions ) {
     start();
   }
 });
