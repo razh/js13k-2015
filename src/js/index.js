@@ -394,8 +394,8 @@ function pause() {
   if ( isAnimating ) {
     game.pause();
     textContent( playButton, 'Continue' );
-    off( playButton, start );
-    on( playButton, play );
+    off( playButton, 'click', start );
+    on( playButton, 'click', play );
     removeClass( menu, 'h' );
   }
 }
@@ -403,8 +403,8 @@ function pause() {
 function end() {
   game.pause();
   textContent( playButton, 'Restart' );
-  off( playButton, play );
-  on( playButton, start );
+  off( playButton, 'click', play );
+  on( playButton, 'click', start );
   removeClass( menu, 'h' );
 }
 
