@@ -87,7 +87,9 @@ var cameraEndZ = 12;
 var cameraTarget = new Vector3().copy( Vector3.Y );
 
 var rotationSpeed = Math.PI / 2;
-var previousLevelRotation = 0;
+var touchRotationSpeed = 48 * rotationSpeed;
+var levelAngularVelocity = 0;
+var levelAngularDamping = 3 * Math.PI;
 
 // State.
 var isFirstPlay = true;
@@ -127,8 +129,7 @@ function createControls() {
     var x = getX( event );
     var dx = x - px;
     px = x;
-    previousLevelRotation = levelRotation;
-    levelRotation += 2 * dx / window.innerWidth * rotationSpeed;
+    levelAngularVelocity = dx / window.innerWidth * touchRotationSpeed;
   }
 
   function end() {
@@ -262,25 +263,25 @@ function reset() {
 
     if ( isCheckingCollisions ) {
       if ( keys[ 37 ] || keys[ 65 ] ) {
-        previousLevelRotation = levelRotation;
-        levelRotation += rotationSpeed * dt;
+        levelAngularVelocity = rotationSpeed;
       } else if ( keys[ 39 ] || keys[ 68 ] ) {
-        previousLevelRotation = levelRotation;
-        levelRotation -= rotationSpeed * dt;
+        levelAngularVelocity = -rotationSpeed;
       }
     }
 
+    levelRotation += levelAngularVelocity * dt;
+    levelAngularVelocity *= 1 - ( levelAngularDamping * dt );
+
     // Update camera target.
     _vector.copy( cameraTarget );
-    if ( previousLevelRotation < levelRotation ) {
+    if ( levelAngularVelocity > 0 ) {
       _vector.x = -1;
-    } else if ( previousLevelRotation > levelRotation ) {
+    } else if ( levelAngularVelocity < 0 ) {
       _vector.x = 1;
     } else {
       _vector.x = 0;
     }
 
-    previousLevelRotation = levelRotation;
     cameraTarget.lerp( _vector, 0.5 * dt );
     camera.lookAt( cameraTarget );
 
@@ -305,6 +306,8 @@ function reset() {
     if ( isCheckingCollisions ) {
       // Check if the right color.
       if ( isColliding ) {
+        shouldUpdateColor = true;
+
         if ( !player.mesh.material.color.equals( closestBlock.material.color ) ) {
           Audio.playError();
           end();
@@ -318,8 +321,6 @@ function reset() {
               .fromArray( colors[ newColorIndex ] )
               .equals( closestBlock.material.color )
           );
-
-          shouldUpdateColor = true;
         }
       }
 
