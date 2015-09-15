@@ -297,15 +297,9 @@ function reset() {
 
     // Update camera target.
     _vector.copy( cameraTarget );
-    if ( levelAngularVelocity > 0 ) {
-      _vector.x = -1;
-    } else if ( levelAngularVelocity < 0 ) {
-      _vector.x = 1;
-    } else {
-      _vector.x = 0;
-    }
+    _vector.x = -levelAngularVelocity;
 
-    cameraTarget.lerp( _vector, 0.5 * dt );
+    cameraTarget.lerp( _vector, dt );
     camera.lookAt( cameraTarget );
 
     updateBlocks();
