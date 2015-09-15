@@ -19,7 +19,7 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Center children. */
+  /* Center children */
   .c {
     display: -webkit-flex;
     display: flex;
@@ -42,7 +42,7 @@
     left: 0;
   }
 
-  /* Hidden class. */
+  /* Hidden class */
   .h {
     display: none;
   }
@@ -68,6 +68,26 @@
   button:focus {
     background: #fff;
     color: #023;
+  }
+
+  /* Hearts */
+  .hts {
+    position: fixed;
+    z-index: 1;
+
+    top: 0.5em;
+    left: 1em;
+
+    -webkit-transform: scale(1, 0.8);
+    transform: scale(1, 0.8);
+
+    pointer-events: none;
+  }
+
+  .ht {
+    display: inline-block;
+    font-size: 2em;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 </style>
 

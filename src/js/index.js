@@ -48,6 +48,10 @@ function create( type ) {
   return document.createElement( type || 'div' );
 }
 
+function innerHTML( el, html ) {
+  el.innerHTML = html;
+}
+
 function textContent( el, text ) {
   el.textContent = text;
 }
@@ -92,6 +96,7 @@ var levelAngularVelocity = 0;
 var levelAngularDamping = 3 * Math.PI;
 
 // State.
+var lives;
 var isFirstPlay = true;
 var isCheckingCollisions = false;
 var shouldUpdateColor = false;
@@ -204,12 +209,30 @@ function createDiamond( scene, x, y, z, radius, top, bottom, rotation ) {
   return mesh;
 }
 
+var renderLives = (function() {
+  var hearts = create();
+  addClass( hearts, 'hts' );
+  append( document.body, hearts );
+
+  return function( count ) {
+    innerHTML( hearts, '' );
+
+    for ( var i = 0; i < count; i++ ) {
+      var heart = create();
+      addClass( heart, 'ht' );
+      textContent( heart, '\u2665' );
+      append( hearts, heart );
+    }
+  };
+})();
+
 var scene;
 var player;
 
 createControls();
 
 function reset() {
+  lives = 5;
   isCheckingCollisions = !isFirstPlay;
   animate.reset();
 
@@ -310,8 +333,7 @@ function reset() {
 
         if ( !player.mesh.material.color.equals( closestBlock.material.color ) ) {
           Audio.playError();
-          end();
-          return;
+          lives--;
         } else {
           var newColorIndex;
           do {
@@ -336,6 +358,12 @@ function reset() {
     diamondRight.position.y = diamondRightY + 0.2 * Math.cos( 0.4 * diamondTime );
 
     Audio.update( dt );
+
+    renderLives( lives );
+
+    if ( lives <= 0 ) {
+      end();
+    }
   };
 }
 
