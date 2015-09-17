@@ -6,15 +6,15 @@ var SpriteCanvasMaterial = require( '../materials/sprite-canvas-material' );
 
 var radius = 32;
 
-var spriteMaterial = new SpriteCanvasMaterial();
+var material = new SpriteCanvasMaterial();
 
-spriteMaterial.program = function program( ctx ) {
+material.program = function program( ctx ) {
   ctx.fillStyle = '#fff';
   ctx.fillRect( 0, 0, 1, 1 );
 };
 
 function createSprite() {
-  var sprite = new Sprite( spriteMaterial );
+  var sprite = new Sprite( material );
 
   var theta = 2 * Math.PI * Math.random();
   var u = 2 * Math.random() - 1;
