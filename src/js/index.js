@@ -112,7 +112,7 @@ function createControls() {
   }
 
   function start( event ) {
-    if ( game.running && isCheckingCollisions ) {
+    if ( isPlaying() ) {
       event.preventDefault();
     }
 
@@ -138,7 +138,7 @@ function createControls() {
   }
 
   function end() {
-    if ( game.running &&isCheckingCollisions ) {
+    if ( isPlaying() ) {
       event.preventDefault();
     }
 
@@ -385,7 +385,7 @@ function start() {
       var emissive = ( ( Math.floor( t * 16 ) % 2 ) < 1 ) ? 0 : 0.5;
       player.mesh.material.emissive.setRGB( emissive, emissive, emissive );
       player.mesh.material.opacity = Math.max( emissive + 0.5, 0.8 );
-    }, 3,  function startCollisions() {
+    }, 3, function startCollisions() {
       isCheckingCollisions = true;
       shouldUpdateColor = true;
     });
@@ -404,6 +404,10 @@ function start() {
     isCheckingCollisions = true;
     shouldUpdateColor = true;
   });
+}
+
+function isPlaying() {
+  return isCheckingCollisions && game.running;
 }
 
 function play() {
@@ -450,7 +454,12 @@ on( document, 'keyup', function( event ) {
   keys[ event.keyCode ] = false;
 
   // Space. Resume.
-  if ( event.keyCode === 32 && !isCheckingCollisions ) {
-    start();
+  if ( event.keyCode === 32 && !isPlaying() ) {
+    if ( isFirstPlay || !lives ) {
+      start();
+    } else {
+      isCheckingCollisions = true;
+      play();
+    }
   }
 });
