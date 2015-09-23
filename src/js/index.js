@@ -101,6 +101,9 @@ var isFirstPlay = true;
 var isCheckingCollisions = false;
 var shouldUpdateColor = false;
 
+var score;
+var highScore = 0;
+
 function createControls() {
   var down = false;
   var px;
@@ -233,6 +236,7 @@ createControls();
 
 function reset() {
   lives = 5;
+  score = 0;
   isCheckingCollisions = !isFirstPlay;
   animate.reset();
 
@@ -329,6 +333,7 @@ function reset() {
           Audio.playError();
           lives--;
         } else {
+          // Update color.
           var newColorIndex;
           do {
             newColorIndex = _.randInt( 0, colors.length - 1 );
@@ -337,6 +342,11 @@ function reset() {
               .fromArray( colors[ newColorIndex ] )
               .equals( closestBlock.material.color )
           );
+
+          score++;
+          if ( score > highScore ) {
+            highScore = score;
+          }
         }
       }
 
@@ -353,6 +363,7 @@ function reset() {
 
     Audio.update( dt );
 
+    renderScore();
     renderLives( lives );
 
     if ( lives <= 0 ) {
@@ -375,6 +386,20 @@ var menu = create();
 menu.id = 'm';
 addClass( menu, 'c' );
 append( document.body, menu );
+
+// Score elements.
+var scoreEl = create();
+scoreEl.id = 's';
+append( container, scoreEl );
+
+var highScoreEl = create();
+highScoreEl.id = 'hs';
+append( container, highScoreEl );
+
+function renderScore() {
+  textContent( scoreEl, 'Score: ' + score );
+  textContent( highScoreEl, 'High Score: ' + highScore );
+}
 
 function start() {
   play();
