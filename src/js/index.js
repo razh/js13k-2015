@@ -443,10 +443,13 @@ function play() {
 function pause() {
   if ( game.running ) {
     game.pause();
-    textContent( playButton, 'Continue' );
-    off( playButton, 'click', start );
-    on( playButton, 'click', play );
     removeClass( menu, 'h' );
+
+    if ( !isFirstPlay ) {
+      textContent( playButton, 'Continue' );
+      off( playButton, 'click', start );
+      on( playButton, 'click', play );
+    }
   }
 }
 
